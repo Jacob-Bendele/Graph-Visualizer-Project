@@ -4,6 +4,9 @@
 
 "use strict";
 
+// new globals
+let group = new THREE.Group();
+
 // Global Variables
 let scene, camera, renderer, cameraControls;
 let fillLight, keyLight, backLight;
@@ -55,6 +58,7 @@ function initCamera()
 	camera.position.z = 1000;
 }
 
+// Currently Unused function 
 function initGeometry()
 {
 	let i;

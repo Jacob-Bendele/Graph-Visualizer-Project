@@ -11,7 +11,7 @@ class Graph
 	{
 		let points = new Array(nodeCount);
 		let i;
-		let max = new THREE.Vector3(0, 0, 0);
+		let center = new THREE.Vector3(0, 0, 0);
 		let min = new THREE.Vector3(100, 100, 100);
 		
 		for (i = 0; i < nodeCount; i++)
@@ -21,13 +21,15 @@ class Graph
 			let posy = Math.floor(Math.random() * 101);
 			let posz = Math.floor(Math.random() * 101);
 			
-			min.x = Math.min(posx, min.x);
-			min.y = Math.min(posy, min.y);
-			min.z = Math.min(posz, min.z);
+			//min.x = Math.min(posx, min.x);
+			//min.y = Math.min(posy, min.y);
+			//min.z = Math.min(posz, min.z);
 			
-			max.x = Math.max(posx, max.x);
-			max.y = Math.max(posy, max.y);
-			max.z = Math.max(posz, max.z);
+			//max.x = Math.max(posx, max.x);
+			//max.y = Math.max(posy, max.y);
+			//max.z = Math.max(posz, max.z);
+			
+			
 			
 			var geometry = new THREE.SphereBufferGeometry( 5, 10, 10 );
 			var material = new THREE.MeshBasicMaterial( {color: 0xff5757} );
@@ -37,15 +39,20 @@ class Graph
 			sphere.position.y = posy;
 			sphere.position.z = posz;
 			
+			center.add(sphere.position);
+			
 			points[i] = sphere;
 			
-			scene.add( sphere );
+			
+			scene.add(sphere);
 		}
 		
-		camera.up = new THREE.Vector3(0,11,0);
-		console.log(max.sub(min).multiplyScalar(0.5));
+		center.multiplyScalar(1/nodeCount);
+		//console.log(max.sub(min).multiplyScalar(0.5));
+		cameraControls.target = (center);
+	
 		//camera.lookAt((max.sub(min).multiplyScalar(0.5)));
-		cameraControls.target = ((max.sub(min).multiplyScalar(0.5)));
+		//cameraControls.target = ((max.sub(min).multiplyScalar(0.5)));
 		cameraControls.update();
 		
 		
