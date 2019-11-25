@@ -9,14 +9,14 @@ let scene, camera, renderer, cameraControls;
 let fillLight, keyLight, backLight;
 let geometry = new THREE.Object3D();
 let objectDiameter;
-let points = new Array(20);
+let points = new Array(40);
 
 let WIDTH = window.innerWidth;
 let HEIGHT = window.innerHeight;
 
 // Initialize everything the Renderer needs and render.
-init();
-render();
+//init();
+//render();
 
 function init()
 {
@@ -33,7 +33,7 @@ function initRenderer()
 	// Create a new instance of a WebGLRenderer.
 	renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(WIDTH, HEIGHT);
-	renderer.setClearColor(0x888888, 1);
+	renderer.setClearColor(0x000000, 1);
 	
 	// Appends/adds the viewport for the renderer to the document body element.
 	document.body.appendChild(renderer.domElement);
@@ -43,30 +43,42 @@ function initScene()
 {
 	// Initializes everything a scene needs; Camera, Geometry, and Lights.
 	initCamera();
-	initGeometry();
+	//initGeometry();
 	initLight();
 }
 
 function initCamera()
 {
 	// Create instance of camera with 50fov, window aspect ration, and near/far distances.
-	camera = new THREE.PerspectiveCamera(50, WIDTH/HEIGHT, 1, 100);
+	camera = new THREE.PerspectiveCamera(50, WIDTH/HEIGHT, 1, 100000);
 	cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
-	//camera.lookAt(10, 10, 10);
+	camera.position.z = 1000;
 }
 
 function initGeometry()
 {
-	let i = 0;
-	//for (i = 0; i <20; i++)
-	//{	
-		let geometry = new THREE.SphereGeometry( 5, 32, 32 );
-		let material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-		let sphere = new THREE.Mesh( geometry, material );
+	let i;
+	for (i = 0; i <20; i++)
+	{	
+
+		let posx = Math.floor(Math.random() * 101);
+		let posy = Math.floor(Math.random() * 101);
+		let posz = Math.floor(Math.random() * 101);
+		
+		var geometry = new THREE.SphereBufferGeometry( 5, 10, 10 );
+		var material = new THREE.MeshBasicMaterial( {color: 0xff5757} );
+		var sphere = new THREE.Mesh( geometry, material );
+		
+		sphere.position.x = posx;
+		sphere.position.y = posy;
+		sphere.position.z = posz;
+		
+		points[i] = sphere;
+		
 		scene.add( sphere );
-		camera.lookAt(sphere.position);
-		console.log(sphere.position);
-	//}
+
+
+	}
 }
 
 // Three directional lights are instantiated, position set, and added to the scene.
