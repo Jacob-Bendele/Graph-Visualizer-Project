@@ -1,7 +1,7 @@
 init();
 render();
 
-let g1 = new Graph(10);
+let g1 = new Graph(4);
 console.log(g1.nodeLink);
 
 			var spgeom = new THREE.SphereBufferGeometry( 5, 10, 10 );
@@ -15,4 +15,3 @@ console.log(g1.nodeLink);
 			
 			scene.add( sphere );
 
-render();

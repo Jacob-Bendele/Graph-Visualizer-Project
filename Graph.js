@@ -5,6 +5,7 @@ class Graph
 		this.nodeCount = nodeCount;
 		this.nodes = this.generateNodes(nodeCount);
 		this.nodeLink = this.generateLinks(this.nodes, nodeCount);
+		this.ead84(nodeCount, this.nodes, this.nodeLink);
 	}
 	
 	generateNodes(nodeCount)
@@ -48,13 +49,8 @@ class Graph
 		}
 		
 		center.multiplyScalar(1/nodeCount);
-		//console.log(max.sub(min).multiplyScalar(0.5));
 		cameraControls.target = (center);
-	
-		//camera.lookAt((max.sub(min).multiplyScalar(0.5)));
-		//cameraControls.target = ((max.sub(min).multiplyScalar(0.5)));
 		cameraControls.update();
-		
 		
 		return points;
 	}
@@ -97,11 +93,63 @@ class Graph
 					//geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
 					var line = new THREE.Line( geometry, material );
 					scene.add( line );
+					console.log("This is the one you rare looking for " + node[i].position.x);
 				}
 			}
 		}
 		
 		return links;
+	}
+	
+	
+	
+	
+	ead84(nodeCount, nodes, links)
+	{
+		let  c1 = 2, c2 = 1, c3 = 1, c4 = 0.1, d;
+		let i, row, col, force = 0; 
 		
+		for (i = 0; i < 100; i++)
+		{
+			for (row = 0; row < nodeCount; row++)
+			{	
+				for (col = 0; col < nodeCount; col++)
+				{
+					if (row == col)
+					{
+						console.log("we continued");
+						continue;
+					}
+					let nodeA = nodes[row].position;
+					let nodeB = nodes[col].position;
+					
+					d = nodeA.distanceTo(nodeB);
+					
+					console.log("distance" + " is " + d);
+					
+					if (links[row][col] == 0)
+					{
+						force += c4 * (c3 / (d * d));
+						//nodes[row].position.multiplyScalar(c4 * force);
+						//console.log("This is repulsive force " + c4 * force);
+					}
+					
+					else
+					{
+						force -= c4 * (c1 * Math.log(d / c2));
+						//console.log("This is the force for attraction" + force);
+						//console.log("This is attractive force" + c4 * force);
+					}
+					
+
+				}
+				nodes[row].position.addScalar(force);
+				console.log("TOTAL FORCE FOR " + row + " is " + force);
+				force = 0;
+			}
+			
+		}	
 	}
 }
+	
+	
