@@ -1,11 +1,15 @@
 class Graph
 {
+	
 	constructor(nodeCount)
 	{
 		this.nodeCount = nodeCount;
 		this.nodes = this.generateNodes(nodeCount);
 		this.nodeLink = this.generateLinks(this.nodes, nodeCount);
-		this.ead84(nodeCount, this.nodes, this.nodeLink);
+		//this.animate();
+		//this.count = 0;
+		//this.ead84(nodeCount, this.nodes, this.nodeLink);
+		
 	}
 	
 	generateNodes(nodeCount)
@@ -109,8 +113,8 @@ class Graph
 		let  c1 = 2, c2 = 1, c3 = 1, c4 = 0.1, d;
 		let i, row, col, force = 0; 
 		
-		for (i = 0; i < 100; i++)
-		{
+		//for (i = 0; i < 100; i++)
+		//{
 			for (row = 0; row < nodeCount; row++)
 			{	
 				for (col = 0; col < nodeCount; col++)
@@ -123,7 +127,7 @@ class Graph
 					let nodeA = nodes[row].position;
 					let nodeB = nodes[col].position;
 					
-					d = nodeA.distanceTo(nodeB);
+					d = Math.abs(nodeA.distanceTo(nodeB));
 					
 					console.log("distance" + " is " + d);
 					
@@ -131,24 +135,25 @@ class Graph
 					{
 						force += c4 * (c3 / (d * d));
 						//nodes[row].position.multiplyScalar(c4 * force);
-						//console.log("This is repulsive force " + c4 * force);
+						//console.log("This is repulsive force " + c4 * (c3 / (d * d)));
 					}
 					
 					else
 					{
 						force -= c4 * (c1 * Math.log(d / c2));
 						//console.log("This is the force for attraction" + force);
-						//console.log("This is attractive force" + c4 * force);
+						//console.log("This is attractive force" + c4 * (c1 * Math.log(d / c2)));
 					}
 					
-
+					console.log("log " + (Math.log(d / c2)));
+					console.log("inverse " + (c3 / (d * d)));
 				}
 				nodes[row].position.addScalar(force);
 				console.log("TOTAL FORCE FOR " + row + " is " + force);
 				force = 0;
 			}
 			
-		}	
+		//}	
 	}
 }
 	
