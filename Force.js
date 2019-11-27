@@ -88,6 +88,42 @@
 		//}	
 	}
 	
+	
+// eventually for reusability it would be preffered to have this take a grph as a paramter instead of call on hardcoded graph
+function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
+{
+	let i, j;
+	for (i = 0; i < nodeCount; i++)
+	{	
+		for (j = 0; j < nodeCount; j++)
+		{
+			if (adjMatrix[i][j] == 1)
+			{
+				let key = i * 10 + j;
+				
+				let currentLink = linkMap.get(key);
+				
+				scene.remove(scene.getObjectById(currentLink.id));
+				
+				let material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+				let geometry = new THREE.Geometry();
+				geometry.vertices.push(new THREE.Vector3( nodes[i].position.x, nodes[i].position.y, nodes[i].position.z) );
+				geometry.vertices.push(new THREE.Vector3( nodes[j].position.x, nodes[j].position.y, nodes[j].position.z) );
+				//geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
+				let line = new THREE.Line( geometry, material );
+				
+				linkMap.delete(key);
+				linkMap.set(key, line);
+				
+				
+				
+				scene.add( line );
+				//console.log("This is the one you rare looking for " + nodes[i].position.x);
+			}
+		}
+	}
+}
+
 let count = 0;
 function animate()
 {
@@ -99,7 +135,10 @@ function animate()
 	}
 	
 	
-	ead84(g1.nodeCount, g1.nodes, g1.nodeLink);
+	ead84(g1.nodeCount, g1.nodes, g1.adjMatrix);
+	updateLinks(g1.linkMap, g1.nodeCount, g1.nodes, g1.adjMatrix); 
+	//drawLinks(g1.nodeCount
+	
 	count++;
 	
 	render();

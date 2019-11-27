@@ -5,7 +5,8 @@ class Graph
 	{
 		this.nodeCount = nodeCount;
 		this.nodes = this.generateNodes(nodeCount);
-		this.nodeLink = this.generateLinks(this.nodes, nodeCount);
+		this.adjMatrix = this.generateAdjMatrix(this.nodes, nodeCount);
+		this.linkMap = this.initLinks(this.adjMatrix, nodeCount, this.nodes);
 		//this.animate();
 		//this.count = 0;
 		//this.ead84(nodeCount, this.nodes, this.nodeLink);
@@ -14,7 +15,7 @@ class Graph
 	
 	generateNodes(nodeCount)
 	{
-		let points = new Array(nodeCount);
+		let nodes = new Array(nodeCount);
 		let i;
 		let center = new THREE.Vector3(0, 0, 0);
 		//let min = new THREE.Vector3(100, 100, 100);
@@ -37,9 +38,9 @@ class Graph
 			
 			
 			
-			var geometry = new THREE.SphereBufferGeometry( 5, 10, 10 );
-			var material = new THREE.MeshBasicMaterial( {color: 0xff5757} );
-			var sphere = new THREE.Mesh( geometry, material );
+			let geometry = new THREE.SphereBufferGeometry( 5, 10, 10 );
+			let material = new THREE.MeshBasicMaterial( {color: 0xff5757} );
+			let sphere = new THREE.Mesh( geometry, material );
 			
 			sphere.position.x = posx;
 			sphere.position.y = posy;
@@ -47,7 +48,7 @@ class Graph
 			
 			center.add(sphere.position);
 			
-			points[i] = sphere;
+			nodes[i] = sphere;
 			
 			
 			scene.add(sphere);
@@ -57,10 +58,10 @@ class Graph
 		cameraControls.target = (center);
 		cameraControls.update();
 		
-		return points;
+		return nodes;
 	}
 	
-	generateLinks(node, nodeCount)
+	generateAdjMatrix(node, nodeCount)
 	{
 		let links = new Array(nodeCount);
 		let i, j, unconnected = 0;
@@ -97,17 +98,7 @@ class Graph
 				links[j][i] = links[i][j];
 				
 				
-				if (links[i][j] == 1)
-				{
-					var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-					var geometry = new THREE.Geometry();
-					geometry.vertices.push(new THREE.Vector3( node[i].position.x, node[i].position.y, node[i].position.z) );
-					geometry.vertices.push(new THREE.Vector3( node[j].position.x, node[j].position.y, node[j].position.z) );
-					//geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
-					var line = new THREE.Line( geometry, material );
-					scene.add( line );
-					console.log("This is the one you rare looking for " + node[i].position.x);
-				}
+
 			}
 			
 			unconnected = 0;
@@ -116,6 +107,35 @@ class Graph
 		return links;
 	}
 	
+	initLinks(adjMatrix, nodeCount, nodes)
+	{
+		let i, j;
+		let linkMap = new Map();
+		
+		for (i = 0; i < nodeCount; i++)
+		{	
+			for (j = 0; j < nodeCount; j++)
+			{
+				if (adjMatrix[i][j] == 1)
+				{
+					let material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+					let geometry = new THREE.Geometry();
+					geometry.vertices.push(new THREE.Vector3( nodes[i].position.x, nodes[i].position.y, nodes[i].position.z) );
+					geometry.vertices.push(new THREE.Vector3( nodes[j].position.x, nodes[j].position.y, nodes[j].position.z) );
+
+					let line = new THREE.Line( geometry, material );
+					
+					let key = i * 10 + j;
+					
+					linkMap.set(key, line);
+					
+					scene.add( line );
+				}
+			}
+		}
+		
+		return linkMap;
+	}
 	
 	
 	
