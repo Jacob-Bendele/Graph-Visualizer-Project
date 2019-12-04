@@ -1,8 +1,8 @@
 init();
 
 
-let g1 = new Graph(20);
-console.log(g1.adjMatrix);
+let g1 = new Graph(10);
+//console.log(g1.adjMatrix);
 
 // Adds green origin point for reference
 let spgeom = new THREE.SphereBufferGeometry( 5, 10, 10 );
@@ -16,8 +16,9 @@ sphere.position.z = 0;
 scene.add( sphere );
 
 
+
 animate(g1);
-console.log("Adjaceny matrix " + g1.adjMatrix);
+
 
 
 //render();

@@ -6,7 +6,9 @@ class Graph
 		this.nodeCount = nodeCount;
 		this.nodes = this.generateNodes(nodeCount);
 		this.adjMatrix = this.generateAdjMatrix(this.nodes, nodeCount);
+		//console.log(this.adjMatrix);
 		this.linkMap = this.initLinks(this.adjMatrix, nodeCount, this.nodes);
+		//console.log(this.adjMatrix);
 		//this.animate();
 		//this.count = 0;
 		//this.ead84(nodeCount, this.nodes, this.nodeLink);
@@ -64,12 +66,27 @@ class Graph
 	generateAdjMatrix(node, nodeCount)
 	{
 		let links = new Array(nodeCount);
-		let i, j, unconnected = 0;
-	
+		let linkCount = new Array(nodeCount);
+		let i, j, z, unconnected = 0, connected = 0;
 		
+		//for (i = 0; i < nodeCount; i++)
+		//{
+		//	linkCount[i] = Math.floor(Math.random() * (nodeCount/(i + 1)) + 1);
+		//	console.log("This is the linkCount " + linkCount[i]);
+		//}
+		console.log("Generation");
+		console.log(links.toString());
 		for (i = 0; i < nodeCount; i++)
 		{
 			links[i] = new Array(nodeCount);
+		}
+		
+		
+		for (i = 0; i < nodeCount; i++)
+		{
+	//		links[i] = new Array(nodeCount);
+			
+			//console.log(links[i].toString());
 			
 			for (j = 0; j < nodeCount; j++)
 			{
@@ -80,27 +97,44 @@ class Graph
 					continue;
 				}
 				
-				links[i][j] = Math.round(Math.random());
+				let z = Math.round(Math.random() * this.randGen(nodeCount, i))
+				console.log("This is z " + z);
+				
+				if (Math.round(Math.random() * this.randGen()) == 1)
+				{
+					if (links[j][i] == 1)
+						links[i][j] = 0;
+					
+					links[i][j] = 1;
+				}
+				
+				else
+					links[i][j] = 0;
 			}
+			
+			console.log(links[i].toString());
 		}
 		
+		console.log("After ij ji");
 		for (i = 0; i < nodeCount; i++)
 		{
 			for (j = 0; j < nodeCount; j++)
 			{
 				if (links[i][j] == 0)
 					unconnected++;
+		
 				
-				
+				//console.log("Unconnected is " + unconnected);
 				if (unconnected == nodeCount)
-					links[i][j] = 1;	
+				{
+					links[i][j] = 1;
+					//console.log("This is because it was empty " + links[i][j]);
+				}
+				
 				
 				links[j][i] = links[i][j];
-				
-				
-
 			}
-			
+			console.log(links[i].toString());
 			unconnected = 0;
 		}
 		
@@ -112,12 +146,17 @@ class Graph
 		let i, j;
 		let linkMap = new Map();
 		
+		console.log("Init function");
 		for (i = 0; i < nodeCount; i++)
 		{	
+			console.log(adjMatrix[i].toString());
 			for (j = 0; j < nodeCount; j++)
 			{
+				
 				if (adjMatrix[i][j] == 1)
 				{
+					adjMatrix[j][i] = 0; // Keeps from drawing two lines
+					
 					let material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 					let geometry = new THREE.Geometry();
 					geometry.vertices.push(new THREE.Vector3( nodes[i].position.x, nodes[i].position.y, nodes[i].position.z) );
@@ -133,11 +172,20 @@ class Graph
 				}
 			}
 		}
-		
+		console.log("After init zero");
+		for (i = 0; i < nodeCount; i++)
+			console.log(adjMatrix[i].toString());
 		return linkMap;
 	}
 	
-	
+	randGen(nodeCount, curIteration)
+	{
+		if (curIteration <= Math.floor(nodeCount * 0.1))
+			return 1;
+
+		else
+			return 9;
+	}
 	
 	ead84(nodeCount, nodes, links)
 	{
@@ -168,7 +216,7 @@ class Graph
 					
 					if (row == col)
 					{
-						console.log("we continued");
+						////console.log("we continued");
 						continue;
 					}
 					
@@ -177,7 +225,7 @@ class Graph
 					
 					d = Math.abs(nodeA.distanceTo(nodeB));
 					
-					console.log("distance" + " is " + d);
+					//console.log("distance" + " is " + d);
 					
 					// Repulsive force
 					if (links[row][col] == 0)
@@ -192,11 +240,11 @@ class Graph
 						translateVector.setZ(nodes[row].position.z - nodes[col].position.z);
 						
 	
-						console.log("Translate Vector " + translateVector.x + " " + translateVector.y + " " + translateVector.z);
-						console.log("translate normalized vec " + translateVector.normalize().length());
-						console.log("Col Point/Vec " + nodes[col].position.x + " " + nodes[col].position.y + " " + nodes[col].position.z);
-						console.log("Row Point/Vec " + nodes[row].position.x + " " + nodes[row].position.y + " " + nodes[row].position.z);
-						console.log("distance vec" + " is " + d);
+						//console.log("Translate Vector " + translateVector.x + " " + translateVector.y + " " + translateVector.z);
+						//console.log("translate normalized vec " + translateVector.normalize().length());
+						//console.log("Col Point/Vec " + nodes[col].position.x + " " + nodes[col].position.y + " " + nodes[col].position.z);
+						//console.log("Row Point/Vec " + nodes[row].position.x + " " + nodes[row].position.y + " " + nodes[row].position.z);
+						//console.log("distance vec" + " is " + d);
 						
 						
 						nodes[row].translateOnAxis(translateVector.normalize(), force);
@@ -207,7 +255,7 @@ class Graph
 					{
 						force = c4 * (c1 * Math.log(d / c2));
 						
-						console.log("Attractive Force " + force);
+						//console.log("Attractive Force " + force);
 						
 						let translateVector = new THREE.Vector3(0, 0, 0);
 						translateVector.setX(nodes[col].position.x - nodes[row].position.x);

@@ -1,7 +1,7 @@
 	function ead84(nodeCount, nodes, links)
 	{
 		console.log("Entered ead84");
-		let  c1 = 2, c2 = 10, c3 = (9 * 50000), c4 = 0.1, d;
+		let  c1 = 2, c2 = 0.001, c3 = 100000, c4 = 0.1, d;
 		let i, row, col, force = 0; 
 		
 		// This loop renders original positions spheres to see the change
@@ -21,7 +21,7 @@
 		//for (i = 0; i < 70; i++)
 		//{
 			
-			console.log("nodeCount is " + nodeCount);
+			//console.log("nodeCount is " + nodeCount);
 			for (row = 0; row < nodeCount; row++)
 			{	
 				for (col = 0; col < nodeCount; col++)
@@ -33,21 +33,21 @@
 						console.log("we continued");
 						continue;
 					}
-					console.log("We made it here");
+					//console.log("We made it here");
 					let nodeA = nodes[row].position;
 					let nodeB = nodes[col].position;
 					
 					d = Math.abs(nodeA.distanceTo(nodeB));
 					
-					console.log("distance" + " is " + d);
+					//console.log("distance" + " is " + d);
 					
 					// Repulsive force
 					if (links[row][col] == 0)
 					{
 						force = c4 * (c3 / (d * d));
 						
-						console.log("Repulsive Force " + force);
-						console.log("Links repulse " + links[row][col]);
+						//console.log("Repulsive Force " + force);
+						//console.log("Links repulse " + links[row][col]);
 				
 						let translateVector = new THREE.Vector3(0, 0, 0);
 						translateVector.setX(nodes[row].position.x - nodes[col].position.x);
@@ -55,11 +55,11 @@
 						translateVector.setZ(nodes[row].position.z - nodes[col].position.z);
 						
 	
-						console.log("Translate Vector " + translateVector.x + " " + translateVector.y + " " + translateVector.z);
-						console.log("translate normalized vec " + translateVector.normalize().length());
-						console.log("Col Point/Vec " + nodes[col].position.x + " " + nodes[col].position.y + " " + nodes[col].position.z);
-						console.log("Row Point/Vec " + nodes[row].position.x + " " + nodes[row].position.y + " " + nodes[row].position.z);
-						console.log("distance vec" + " is " + d);
+						//console.log("Translate Vector " + translateVector.x + " " + translateVector.y + " " + translateVector.z);
+						//console.log("translate normalized vec " + translateVector.normalize().length());
+						//console.log("Col Point/Vec " + nodes[col].position.x + " " + nodes[col].position.y + " " + nodes[col].position.z);
+						//console.log("Row Point/Vec " + nodes[row].position.x + " " + nodes[row].position.y + " " + nodes[row].position.z);
+						//console.log("distance vec" + " is " + d);
 						
 						
 						nodes[row].translateOnAxis(translateVector.normalize(), force);
@@ -70,8 +70,8 @@
 					{
 						force = c4 * (c1 * Math.log(d / c2));
 						
-						console.log("Attractive Force " + force);
-						console.log("Links attractive " + links[row][col]);
+						//console.log("Attractive Force " + force);
+						//console.log("Links attractive " + links[row][col]);
 						
 						let translateVector = new THREE.Vector3(0, 0, 0);
 						translateVector.setX(nodes[col].position.x - nodes[row].position.x);
@@ -95,6 +95,7 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 	let i, j;
 	for (i = 0; i < nodeCount; i++)
 	{	
+		console.log(adjMatrix[i].toString());
 		for (j = 0; j < nodeCount; j++)
 		{
 			if (adjMatrix[i][j] == 1)
@@ -118,7 +119,7 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 				
 				
 				scene.add( line );
-				//console.log("This is the one you rare looking for " + nodes[i].position.x);
+				////console.log("This is the one you rare looking for " + nodes[i].position.x);
 			}
 		}
 	}
@@ -127,10 +128,10 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 let count = 0;
 function animate()
 {
-	console.log("This is the count " + count);
+	//console.log("This is the count " + count);
 	if (count == 100)
 	{	
-		console.log("Returned out of animate");
+		//console.log("Returned out of animate");
 		return;
 	}
 	
