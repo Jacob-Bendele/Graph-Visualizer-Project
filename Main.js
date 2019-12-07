@@ -4,6 +4,8 @@ init();
 let g1 = new Graph(10);
 //console.log(g1.adjMatrix);
 
+initGUI(g1);
+
 // Adds green origin point for reference
 let spgeom = new THREE.SphereBufferGeometry( 5, 10, 10 );
 let spmaterial = new THREE.MeshBasicMaterial( {color: 0x6beb34} );

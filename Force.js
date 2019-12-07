@@ -95,12 +95,18 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 	let i, j;
 	for (i = 0; i < nodeCount; i++)
 	{	
-		console.log(adjMatrix[i].toString());
+		//console.log(adjMatrix[i].toString());
 		for (j = 0; j < nodeCount; j++)
 		{
 			if (adjMatrix[i][j] == 1)
 			{
 				let key = i * 10 + j;
+				
+				//i = 10 j = 5
+				//j = 5 i = 10 
+				
+				//10 * 10 + 5 = key = 105
+				//key = 10 * 5 + 10 = 60
 				
 				let currentLink = linkMap.get(key);
 				
@@ -126,7 +132,7 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 }
 
 let count = 0;
-function animate()
+function animate(graph)
 {
 	//console.log("This is the count " + count);
 	if (count == 100)
@@ -136,14 +142,16 @@ function animate()
 	}
 	
 	
-	ead84(g1.nodeCount, g1.nodes, g1.adjMatrix);
-	updateLinks(g1.linkMap, g1.nodeCount, g1.nodes, g1.adjMatrix); 
+	ead84(graph.nodeCount, graph.nodes, graph.adjMatrix);
+	updateLinks(graph.linkMap, graph.nodeCount, graph.nodes, graph.adjMatrix); 
 	//drawLinks(g1.nodeCount
 	
 	count++;
 	
 	render();
-	requestAnimationFrame(animate);
+	requestAnimationFrame(function(timestamp) {
+		animate(graph);
+	});
 }
 
 

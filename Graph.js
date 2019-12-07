@@ -5,13 +5,14 @@ class Graph
 	{
 		this.nodeCount = nodeCount;
 		this.nodes = this.generateNodes(nodeCount);
-		this.adjMatrix = this.generateAdjMatrix(this.nodes, nodeCount);
+		this.adjMatrix = this.generateAdjMatrix2(this.nodes, nodeCount);
 		//console.log(this.adjMatrix);
 		this.linkMap = this.initLinks(this.adjMatrix, nodeCount, this.nodes);
 		//console.log(this.adjMatrix);
 		//this.animate();
 		//this.count = 0;
 		//this.ead84(nodeCount, this.nodes, this.nodeLink);
+		this.printAdjMatrix(this.nodeCount, this.adjMatrix)
 		
 	}
 	
@@ -63,6 +64,90 @@ class Graph
 		return nodes;
 	}
 	
+	generateAdjMatrix2(node, nodeCount)
+	{
+		let links = new Array(nodeCount);
+		let i, j, unconnected = 0;
+		
+		for (i = 0; i < nodeCount; i++)
+			links[i] = new Array(nodeCount);
+		
+		
+		for (i = nodeCount - 1; i >= 0; i--)
+		{	
+			for (j = nodeCount - 1; j >= 0; j--)
+			{
+				if (i == j)
+				{	
+					links[i][j] = 0;
+					continue;
+				}
+				
+				// If i is less than 20 percent of our maximum nodes then
+				// we can assign it more links. Otherwise we dont
+				// want 8 links per node etc.
+				if (i < Math.round(nodeCount * 0.2))
+				{
+					let edge = Math.round(Math.random());
+					
+					links[i][j] = edge;
+					links[j][i] = edge;
+				}
+				
+				else
+				{
+					// Magic number, but represents a 10 percent chance
+					if (Math.round(Math.random() * 9) == 4)
+					{
+						links[i][j] = 1;
+						links[j][i] = 1;
+					}
+					
+					// Not 1 so must be zero
+					else 
+					{
+						links[i][j] = 0;
+						links[j][i] = 0;
+					}
+				}	
+			}
+		}
+		
+		this.printAdjMatrix(nodeCount, links);
+		
+		for (i = 0; i < nodeCount; i++)
+		{	
+			for (j = 0; j < nodeCount; j++)
+			{
+				if (links[i][j] == 0)
+				{
+					unconnected++;
+				}
+				
+				if (unconnected == nodeCount)
+				{
+					console.log("This is unconnected : " + unconnected);
+					console.log(i);
+					console.log(nodeCount - i - 1);
+					links[i][nodeCount - i - 1] = 1;
+					links[nodeCount - i - 1][i] = 1;
+					
+					//links[i][nodeCount - i - 2] = 1;
+					//links[nodeCount - i - 2][i] = 1;
+					console.log("ENCOUNTERED AN EMPTY LINK ROW 1 ");
+					console.log(links[i][nodeCount - i - 1]);
+					console.log(links[nodeCount - i - 1][i]);
+				}
+			}
+			unconnected = 0;
+		}
+
+		this.printAdjMatrix(nodeCount, links);
+		
+		return links;
+	}
+	
+	// currenlty not used
 	generateAdjMatrix(node, nodeCount)
 	{
 		let links = new Array(nodeCount);
@@ -97,8 +182,8 @@ class Graph
 					continue;
 				}
 				
-				let z = Math.round(Math.random() * this.randGen(nodeCount, i))
-				console.log("This is z " + z);
+				//let z = Math.round(Math.random() * this.randGen(nodeCount, i))
+				//console.log("This is z " + z);
 				
 				if (Math.round(Math.random() * this.randGen()) == 1)
 				{
@@ -147,6 +232,7 @@ class Graph
 		let linkMap = new Map();
 		
 		console.log("Init function");
+		
 		for (i = 0; i < nodeCount; i++)
 		{	
 			console.log(adjMatrix[i].toString());
@@ -173,9 +259,16 @@ class Graph
 			}
 		}
 		console.log("After init zero");
+		
+		return linkMap;
+	}
+	
+	printAdjMatrix(nodeCount, adjMatrix)
+	{
+		let i;
+		
 		for (i = 0; i < nodeCount; i++)
 			console.log(adjMatrix[i].toString());
-		return linkMap;
 	}
 	
 	randGen(nodeCount, curIteration)
@@ -187,7 +280,7 @@ class Graph
 			return 9;
 	}
 	
-	ead84(nodeCount, nodes, links)
+	/*ead84(nodeCount, nodes, links)
 	{
 		let  c1 = 2, c2 = 1, c3 = (9 * 10000), c4 = 0.1, d;
 		let i, row, col, force = 0; 
@@ -204,7 +297,7 @@ class Graph
 			
 			scene.add(sphere);
 			render();
-		}*/
+		}
 		
 		//for (i = 0; i < 70; i++)
 		//{
@@ -270,7 +363,7 @@ class Graph
 				}
 			}
 		//}	
-	}
+	}*/
 }
 	
 	

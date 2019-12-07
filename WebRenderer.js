@@ -28,7 +28,7 @@ function init()
 	initRenderer();
 	initScene();
 	eventHandlers();
-	initGUI();
+	//initGUI();
 }
 
 function initRenderer()
@@ -48,6 +48,14 @@ function initScene()
 	initCamera();
 	//initGeometry();
 	initLight();
+}
+
+function clearScene()
+{
+	while (scene.children.length > 0)
+	{
+		scene.remove(scene.children[0]);
+	}
 }
 
 function initCamera()
@@ -136,32 +144,25 @@ function handleCameraChange()
 	);
 }
 
-function initGUI()
+function initGUI(graph)
 {	
 	// Creates instance of dat.GUI
 	let guiController = new dat.GUI();
 
 	// Creates folders in the dat.GUI
-	let keyLightFolder = guiController.addFolder("Key Light");
-	let fillLightFolder = guiController.addFolder("Fill Light");
-	let backLightFolder = guiController.addFolder("Back Light");
-	let scale = guiController.addFolder("Scale");
-	let rotation = guiController.addFolder("Rotation");
-	let translation = guiController.addFolder("Translation");
+	let pathTraversal = guiController.addFolder("Path Traversal Alogrithms");
+	let shortestPath = guiController.addFolder("Shortest Path Algorithms");
+	let nodes = guiController.addFolder("Nodes");
+
 	
 	// Creates GUIobject
 	let guiObject = {
 		
-		KEY : {
-			visKey : true, 
-			intensKey : keyLight.intensity, 
-			colorKey : "#" + keyLight.color.getHexString()
-		},
+		NODES : graph.nodeCount,
 		
-		FILL : {
-			visFill : true, 
-			intensFill : fillLight.intensity, 
-			colorFill : "#" + fillLight.color.getHexString()
+		PATHFINDING : {
+			BFS : false, 
+			DFS : false
 		},
 		
 		BACK : {
@@ -182,75 +183,57 @@ function initGUI()
 	};
 	
 	// Adds property to GUI for scaling the rendered object
-	scale.add(guiObject, "scale")
-	.name("Object Scale")
-	.min(0.1).max(2).step(0.1)
+	nodes.add(guiObject, "NODES")
+	.name("# of Nodes")
+	.min(1).max(15).step(1)
 	.onChange(
 		function(val)
 		{
-			geometry.scale.setScalar(val);
+			
+			clearScene();
+			count = 0;
+			let graph = new Graph(val);
+			animate(graph);
+			
+			//initGUI(graph);
 			
 			// Upon rescaling of the object; recompute the length (diameter) of it using a bounding box
-			let bBox = new THREE.Box3().setFromObject(geometry);
-			let size = new THREE.Vector3();
-			bBox.getSize(size);
+			//let bBox = new THREE.Box3().setFromObject(geometry);
+			//let size = new THREE.Vector3();
+			//bBox.getSize(size);
 			
-			objectDiameter = size.length();
-			console.log(objectDiameter);
+			//objectDiameter = size.length();
+			//console.log(objectDiameter);
 			
-			render();
+			//render();
 		}
 	);
 	
-	// Adds property to GUI for roating the rendered object
-	rotation.add(guiObject, "rotation")
-	.name("Object Rotation")
-	.min(0).max(360).step(1)
-	.onChange(
-		function(deg)
-		{	
-			geometry.rotation.set(0, (deg * (Math.PI / 180)), 0);
-			render();
-		}
-	);
 	
 	// Adds property to GUI for translating the rendered object along x, y, and z axes.
-	translation.add(guiObject.TRANSLATE, "x")
-	.name("Translation X")
-	.min(-2).max(2).step(1)
+	pathTraversal.add(guiObject.PATHFINDING, "BFS")
+	.name("BFS")
 	.onChange(
-		function(distX)
+		function()
 		{
-			geometry.position.set(distX * objectDiameter, geometry.position.y, geometry.position.z);
-			render();
+			// Run Bfs function
 		}
 	);
 	
-	translation.add(guiObject.TRANSLATE, "y")
-	.name("Translation Y")
-	.min(-2).max(2).step(1)
+	pathTraversal.add(guiObject.PATHFINDING, "DFS")
+	.name("DFS")
 	.onChange(
-		function(distY)
-		{	
-			geometry.position.set(geometry.position.x, distY * objectDiameter, geometry.position.z);
-			render();
+		function()
+		{
+			// Run Bfs function
 		}
 	);
 	
-	translation.add(guiObject.TRANSLATE, "z")
-	.name("Translation Z")
-	.min(-2).max(2).step(1)
-	.onChange(
-		function(distZ)
-		{	
-			geometry.position.set(geometry.position.x, geometry.position.y, distZ * objectDiameter);
-			render();
-		}
-	);
+
 	
 	
 	// Adds properties to GUI for Key Light
-	keyLightFolder.add(guiObject.KEY, "visKey")
+	/*keyLightFolder.add(guiObject.KEY, "visKey")
 	.name("Key Light On/Off")
 	.onChange(
 		function(flag)
@@ -279,71 +262,7 @@ function initGUI()
 			keyLight.color.set(hexstring)
 			render();
 		}
-	);
-	
-	// Adds properties to GUI for Fill Light
-	fillLightFolder.add(guiObject.FILL, "visFill")
-	.name("Fill Light On/Off")
-	.onChange(
-		function(flag)
-		{
-			fillLight.visible = flag;
-			render();
-		}
-	);
-
-	fillLightFolder.add(guiObject.FILL, "intensFill")
-	.min(0).max(1).step(0.1)
-	.name("Fill Intensity")
-	.onChange(
-		function(val)
-		{
-			fillLight.intensity = val;
-			render();
-		}
-	);
-	
-	fillLightFolder.addColor(guiObject.FILL, "colorFill")
-	.name("Fill Color")
-	.onChange(
-		function(hexstring)
-		{
-			fillLight.color.set(hexstring)
-			render();
-		}
-	);
-
-	// Adds properties to GUI for Back Light
-	backLightFolder.add(guiObject.BACK, "visBack")
-	.name("Back Light On/Off")
-	.onChange(
-		function(flag)
-		{
-			backLight.visible = flag;
-			render();
-		}
-	);
-	
-	backLightFolder.add(guiObject.BACK, "intensBack")
-	.min(0).max(1).step(0.1)
-	.name("Back Intensity")
-	.onChange(
-		function(val)
-		{
-			backLight.intensity = val;
-			render();
-		}
-	);
-	
-	backLightFolder.addColor(guiObject.BACK, "colorBack")
-	.name("Back Color")
-	.onChange(
-		function(hexstring)
-		{
-			backLight.color.set(hexstring)
-			render();
-		}
-	);	
+	);*/
 }
 
 function render()
