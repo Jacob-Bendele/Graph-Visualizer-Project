@@ -6,6 +6,11 @@ class Graph
 		this.nodeCount = nodeCount;
 		this.nodes = this.generateNodes(nodeCount);
 		this.adjMatrix = this.generateAdjMatrix2(this.nodes, nodeCount);
+		
+		// This clone is currently necessary as the initilization of links
+		// zeros out the [i][j] [j][i] pairs as to not render to links
+		// for other computations it is necessary to have these present.
+		this.cloneAdjMatrix = this.copyAdjMatrix(nodeCount, this.adjMatrix);
 		//console.log(this.adjMatrix);
 		this.linkMap = this.initLinks(this.adjMatrix, nodeCount, this.nodes);
 		//console.log(this.adjMatrix);
@@ -147,85 +152,28 @@ class Graph
 		return links;
 	}
 	
-	// currenlty not used
-	generateAdjMatrix(node, nodeCount)
+	copyAdjMatrix(nodeCount, adjMatrix)
 	{
-		let links = new Array(nodeCount);
-		let linkCount = new Array(nodeCount);
-		let i, j, z, unconnected = 0, connected = 0;
-		
-		//for (i = 0; i < nodeCount; i++)
-		//{
-		//	linkCount[i] = Math.floor(Math.random() * (nodeCount/(i + 1)) + 1);
-		//	console.log("This is the linkCount " + linkCount[i]);
-		//}
-		console.log("Generation");
-		console.log(links.toString());
-		for (i = 0; i < nodeCount; i++)
-		{
-			links[i] = new Array(nodeCount);
-		}
-		
+		let i, j;
+		let cloneAdjMatrix = new Array(nodeCount);
 		
 		for (i = 0; i < nodeCount; i++)
-		{
-	//		links[i] = new Array(nodeCount);
-			
-			//console.log(links[i].toString());
-			
-			for (j = 0; j < nodeCount; j++)
-			{
-				// Don't want self cycles
-				if (i == j)
-				{
-					links[i][j] = 0;
-					continue;
-				}
-				
-				//let z = Math.round(Math.random() * this.randGen(nodeCount, i))
-				//console.log("This is z " + z);
-				
-				if (Math.round(Math.random() * this.randGen()) == 1)
-				{
-					if (links[j][i] == 1)
-						links[i][j] = 0;
-					
-					links[i][j] = 1;
-				}
-				
-				else
-					links[i][j] = 0;
-			}
-			
-			console.log(links[i].toString());
-		}
+			cloneAdjMatrix[i] = new Array(nodeCount);
 		
-		console.log("After ij ji");
 		for (i = 0; i < nodeCount; i++)
 		{
 			for (j = 0; j < nodeCount; j++)
 			{
-				if (links[i][j] == 0)
-					unconnected++;
-		
-				
-				//console.log("Unconnected is " + unconnected);
-				if (unconnected == nodeCount)
-				{
-					links[i][j] = 1;
-					//console.log("This is because it was empty " + links[i][j]);
-				}
-				
-				
-				links[j][i] = links[i][j];
+				cloneAdjMatrix[i][j] = adjMatrix[i][j];
 			}
-			console.log(links[i].toString());
-			unconnected = 0;
 		}
 		
-		return links;
+		return cloneAdjMatrix;
 	}
 	
+	
+	// TODO: Change to "initEdges" and edgeMap: more instantly readable in the context of 
+	// a graph.
 	initLinks(adjMatrix, nodeCount, nodes)
 	{
 		let i, j;
@@ -279,91 +227,6 @@ class Graph
 		else
 			return 9;
 	}
-	
-	/*ead84(nodeCount, nodes, links)
-	{
-		let  c1 = 2, c2 = 1, c3 = (9 * 10000), c4 = 0.1, d;
-		let i, row, col, force = 0; 
-		
-		// This loop renders original positions spheres to see the change
-		/*for (i = 0; i < nodeCount; i++)
-		{
-			var geometry = new THREE.SphereBufferGeometry( 5, 10, 10 );
-			var material = new THREE.MeshBasicMaterial( {color: 0xff5757} );
-			var sphere = new THREE.Mesh( geometry, material );
-			sphere.position.x = nodes[i].position.x;
-			sphere.position.y = nodes[i].position.y;
-			sphere.position.z = nodes[i].position.z;
-			
-			scene.add(sphere);
-			render();
-		}
-		
-		//for (i = 0; i < 70; i++)
-		//{
-			for (row = 0; row < nodeCount; row++)
-			{	
-				for (col = 0; col < nodeCount; col++)
-				{
-					force = 0;
-					
-					if (row == col)
-					{
-						////console.log("we continued");
-						continue;
-					}
-					
-					let nodeA = nodes[row].position;
-					let nodeB = nodes[col].position;
-					
-					d = Math.abs(nodeA.distanceTo(nodeB));
-					
-					//console.log("distance" + " is " + d);
-					
-					// Repulsive force
-					if (links[row][col] == 0)
-					{
-						force = c4 * (c3 / (d * d));
-						
-						console.log("Repulsive Force " + force);
-				
-						let translateVector = new THREE.Vector3(0, 0, 0);
-						translateVector.setX(nodes[row].position.x - nodes[col].position.x);
-						translateVector.setY(nodes[row].position.y - nodes[col].position.y);
-						translateVector.setZ(nodes[row].position.z - nodes[col].position.z);
-						
-	
-						//console.log("Translate Vector " + translateVector.x + " " + translateVector.y + " " + translateVector.z);
-						//console.log("translate normalized vec " + translateVector.normalize().length());
-						//console.log("Col Point/Vec " + nodes[col].position.x + " " + nodes[col].position.y + " " + nodes[col].position.z);
-						//console.log("Row Point/Vec " + nodes[row].position.x + " " + nodes[row].position.y + " " + nodes[row].position.z);
-						//console.log("distance vec" + " is " + d);
-						
-						
-						nodes[row].translateOnAxis(translateVector.normalize(), force);
-					}
-
-					// Attractive force
-					else
-					{
-						force = c4 * (c1 * Math.log(d / c2));
-						
-						//console.log("Attractive Force " + force);
-						
-						let translateVector = new THREE.Vector3(0, 0, 0);
-						translateVector.setX(nodes[col].position.x - nodes[row].position.x);
-						translateVector.setY(nodes[col].position.y - nodes[row].position.y);
-						translateVector.setZ(nodes[col].position.z - nodes[row].position.z);
-
-						nodes[row].translateOnAxis(translateVector.normalize(), force);
-					}
-					
-					//console.log("log " + (Math.log(d / c2)));
-					//console.log("inverse " + (c3 / (d * d)));
-				}
-			}
-		//}	
-	}*/
 }
 	
 	

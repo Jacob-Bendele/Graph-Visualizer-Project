@@ -1,10 +1,18 @@
 init();
 
 
-let g1 = new Graph(10);
+let graph = new Graph(10);
 //console.log(g1.adjMatrix);
 
-initGUI(g1);
+initGUI(graph);
+
+//let q = new Queue();
+//let visited = new Array(graph.nodeCount);
+//let node, count1 = 0, start = 5;
+
+//q.enqueue(start);
+//
+//visited[start] = true;
 
 // Adds green origin point for reference
 let spgeom = new THREE.SphereBufferGeometry( 5, 10, 10 );
@@ -19,7 +27,7 @@ scene.add( sphere );
 
 
 
-animate(g1);
+animate(graph);
 
 
 
