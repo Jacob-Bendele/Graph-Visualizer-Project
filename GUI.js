@@ -33,9 +33,8 @@ function initGUI(graph)
 				/* Calls Depth First Search Function*/
 				let visited = new Array(graph.nodeCount);
 				let stack = new Stack();
-				let i;
 				
-				for (i = 0; i < graph.nodeCount; i++)
+				for (let i = 0; i < graph.nodeCount; i++)
 				{
 					visited[i] = 0;
 				}
@@ -46,21 +45,28 @@ function initGUI(graph)
 		},
 		
 		SHORTESTPATH : {
-			Dijkstra : function() {/* Calls Breadth First Search Function*/}, 
+			Dijkstra : function() 
+			{
+				
+				/* Calls Breadth First Search Function*/
+				let matrix = calcDistance(graph);
+				let path = dijkstra(0, matrix, graph, graph.nodeCount - 1);
+				console.log(path);
+				
+			}, 
 			Bellman : function() {/* Calls Breadth First Search Function*/}
 		},
 		
 		CLEAR: 
 		function()
 		{
-			let i;
 			
 			for (const entry of graph.linkMap.keys())
 			{
 				graph.linkMap.get(entry).material.color.setHex(0x0000ff);
 			}
 			
-			for (i = 0; i < graph.nodeCount; i++)
+			for (let i = 0; i < graph.nodeCount; i++)
 			{
 				graph.nodes[i].material.color.setHex(0xff5757);
 			}

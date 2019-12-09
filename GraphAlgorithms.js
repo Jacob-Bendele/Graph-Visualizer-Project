@@ -1,48 +1,3 @@
-function BFS2(graph, start)
-{
-	// Breadth First Search
-	
-	
-	//graph.cloneAdjMatrix
-	
-	let q = new Queue();
-	let visited = new Array(graph.nodeCount);
-	let i, node;
-	
-	q.enqueue(start);
-	visited[start] = 1;
-	
-	console.log(graph.cloneAdjMatrix);
-	console.log(graph.adjMatrix);
-	console.log(q);
-
-	
-	while (!q.isEmpty())
-	{
-		node = q.dequeue();
-		requestAnimationFrame(function(timestamp){graph.nodes[node].material.color.setHex(0x43ff0a);
-		render();});
-		
-		console.log("Node " + node);
-		
-		//animBFS(graph, visited, q, node, 0);
-		for (i = 0; i < graph.nodeCount; i++){
-			if (graph.cloneAdjMatrix[node][i] && !visited[i])
-			{
-				console.log("We entered into the if");
-				visited[i] = 1;
-				q.enqueue(i);
-				//console.log("Is the animation queeu working " + q.isEmpty());
-				//animate2(i);
-				
-					
-				
-			}
-		}
-		console.log("is q actually empty ? " + q.isEmpty());
-	}
-}
-
 function BFS(graph, q, visited, node)
 {	
 	if (q.isEmpty())
@@ -64,9 +19,8 @@ function BFS(graph, q, visited, node)
 	
 	
 	//console.log("THIS IS THE FUCKING COUNT " + count1);
-	let i;
 	
-	for (i = 0; i < graph.nodeCount; i++)
+	for (let i = 0; i < graph.nodeCount; i++)
 	{
 		if (graph.cloneAdjMatrix[node][i] && !visited[i])
 		{
@@ -101,13 +55,8 @@ function BFS(graph, q, visited, node)
 	//	BFS(graph, q, visited, node)});
 }
 
-
 function DFS(graph, stack, visited, node)
 {
-	let i;
-
-	
-	
 	if (stack.isEmpty())
 		return; 
 	
@@ -124,7 +73,7 @@ function DFS(graph, stack, visited, node)
 		visited[node] = 1;
 	}
 	
-	for (i = 0; i < graph.nodeCount; i++)
+	for (let i = 0; i < graph.nodeCount; i++)
 	{
 		if (graph.cloneAdjMatrix[node][i] && !visited[i])
 		{
@@ -156,41 +105,103 @@ function DFS(graph, stack, visited, node)
 		DFS(graph, stack, visited, node);})}, 500);
 }	
 
-function DFS2(graph, visited, node)
+function calcDistance(graph)
 {
-	let i;
+	let matrix = new Array(graph.nodeCount);
 	
-	console.log("This is the node and nodeCount " + node + " " + graph.nodeCount);
-	if (node >= graph.nodeCount)
-		return;
-	
-	visited[node] = 1;
-	
-	graph.nodes[node].material.color.setHex(0x43ff0a);
-	
-	if (node == 0)
-		graph.nodes[node].material.color.setHex(0xffffff);
-	
-	for (i = 0; i < graph.nodeCount; i++)
+	for (let i = 0; i < graph.nodeCount; i++)
 	{
-		console.log("This is the loop varialble in DFS" + i);
-		if (graph.cloneAdjMatrix[node][i] && !visited[i])
+		matrix[i] = new Array(graph.nodeCount);
+	}
+	
+	for (let i = 0; i < graph.nodeCount; i++)
+	{
+		for (let j = 0; j < graph.nodeCount; j++)
 		{
-			render();
-			requestAnimationFrame(function(timestamp){
-			DFS(graph, visited, i);});
-			//render();
-			//requestAnimationFrame(function(timestamp) {
-			//	DFS(graph, visited, node);
-			//});
+			if (graph.cloneAdjMatrix[i][j] == 1)
+			{
+				
+				 matrix[i][j] = graph.nodes[i].position.distanceTo(graph.nodes[j].position);
+				 console.log("This is the matrix distance associated with " + matrix[i][j]);
+			}
+			
+			else
+				matrix[i][j] = 0;
 		}
-		// Becasues we do not return from a call back function we have to return somehow.
+
+	}
+	
+	return matrix;
+}
+
+
+// This version of dijkstra is going to find the shortest path to all nodes.
+// Therefore a list of the shortest paths can be returned and either the shortest path can be displayed
+// or a gradient of color can be observed with the most intense being the shortest path to the last
+// element.
+function dijkstra(start, matrix, graph, end)
+{
+	let distance = new Array(graph.nodeCount);
+	let visited = new Array(graph.nodeCount);
+	let path = [];
+
+	let numVisited = 0;
+	
+	let pq = new PriorityQueue();
+	distance.fill(1000000); // infinte
+	distance[start] = 0;
+	
+	
+	
+	if (start == 0)
+		graph.nodes[start].material.color.setHex(0xffffff);
+	
+	
+	for (let i = 0; i < graph.nodeCount; i++)
+	{
+		//let vertex = new QElement(i, distance[i]);
+		pq.enqueue(i, distance[i]); 
+	}
+	
+	while(!pq.isEmpty() && numVisited < graph.nodeCount)
+	{
+		let vertex = pq.dequeue();
 		
-		if (graph.adjMatrix[node][i] == 1)
+		if (visited[vertex.element]) 
+			continue;
+		
+		visited[vertex.element] = true; // true
+		console.log("This is the vertex " + vertex.element + " " + vertex.priority);
+		
+		numVisited++;
+		
+		for (let i = 0; i < graph.nodeCount; i++)
 		{
-			let key1 = 10 * node + i;
-			graph.linkMap.get(key1).material.color.setHex(0xffffff);
+			if (matrix[vertex.element][i] > 0 && distance[vertex.element] + matrix[vertex.element][i] < distance[i])
+			{
+				console.log(end);
+				console.log("This is the vertex with a short path" + vertex.element);
+				if (vertex.element == end)
+				{
+					console.log(" we vertec elemented " + i );
+					path.push(i);
+					console.log(path);
+				}
+					
+				distance[i] = distance[vertex.element] + matrix[vertex.element][i];
+				pq.enqueue(i, distance[i]);
+			}
 		}
+	
+		
 		
 	}
+	
+	return path;
 }
+
+
+
+
+
+
