@@ -43,35 +43,6 @@ function BFS2(graph, start)
 	}
 }
 
-
-function animBFS(graph, visited, q, node, i)
-{
-	console.log("This is fucking i you stupid fucking igit" + i);
-	i++; 
-	
-	if (i == graph.nodeCount)
-	{	
-		console.log("returned out of the animBFS function");
-		return;
-	}
-	
-	if (graph.cloneAdjMatrix[node][i] && !visited[i])
-	{
-		visited[i] = true;
-		q.enqueue(i);
-		console.log(q);
-		//console.log("Is the animation queeu working " + q.isEmpty());
-		//animate2(i);
-		//graph.nodes[node].material.color.setHex(0x43ff0a);
-			
-		
-	}
-	
-	render();
-	requestAnimationFrame(function(timestamp){animBFS(graph, visited, q, node, i)});
-}
-
-
 function BFS(graph, q, visited, node)
 {	
 	if (q.isEmpty())
@@ -82,7 +53,10 @@ function BFS(graph, q, visited, node)
 	
 	node = q.dequeue();
 	graph.nodes[node].material.color.setHex(0x43ff0a);
-	console.log("This is the node " + node);
+	
+	if (node == 0)
+		graph.nodes[node].material.color.setHex(0xffffff);
+	console.log("This is the dequeue node " + node);
 	
 	//if (count1 == graph.nodeCount)
 		//count1 = 0;
@@ -90,6 +64,7 @@ function BFS(graph, q, visited, node)
 	
 	
 	//console.log("THIS IS THE FUCKING COUNT " + count1);
+	let i;
 	
 	for (i = 0; i < graph.nodeCount; i++)
 	{
@@ -98,17 +73,124 @@ function BFS(graph, q, visited, node)
 			visited[i] = 1; 
 			
 			q.enqueue(i);
+			
+			// Problem is that we end up with a node i combo that is otherwise zero and not added to our linkMap
+			// So it is necessary to 
+			
+			
+			//console.log("This is the key Value " + key1);
+			console.log("This is the node for the key value " + i);
+			
 			console.log("Q has benn added");
 			
 			
 		}
+			
+		if (graph.adjMatrix[node][i] == 1)
+		{
+			let key1 = 10 * node + i;
+			graph.linkMap.get(key1).material.color.setHex(0xffffff);
+		}
 	}
 	
-	//count1++;
+	render();
+	setTimeout(() => {requestAnimationFrame(function(timestamp) {
+		BFS(graph, q, visited, node);})}, 500);
+		
+	//requestAnimationFrame(function(timestamp) {
+	//	BFS(graph, q, visited, node)});
+}
+
+
+function DFS(graph, stack, visited, node)
+{
+	let i;
+
 	
+	
+	if (stack.isEmpty())
+		return; 
+	
+
+	node = stack.pop();
+	
+	graph.nodes[node].material.color.setHex(0x43ff0a);
+	
+	if (node == 0)
+		graph.nodes[node].material.color.setHex(0xffffff);
+		
+	if (!visited[node])
+	{
+		visited[node] = 1;
+	}
+	
+	for (i = 0; i < graph.nodeCount; i++)
+	{
+		if (graph.cloneAdjMatrix[node][i] && !visited[i])
+		{
+			//visited[i] = 1; 
+			
+			stack.push(i); // push the unvisited node that has a link on it to the stack
+			
+			// Problem is that we end up with a node i combo that is otherwise zero and not added to our linkMap
+			// So it is necessary to 
+			
+			
+			//console.log("This is the key Value " + key1);
+			console.log("This is the node for the key value " + i);
+			
+			console.log("Q has benn added");
+			
+			
+		}
+			
+		if (graph.adjMatrix[node][i] == 1)
+		{
+			let key1 = 10 * node + i;
+			graph.linkMap.get(key1).material.color.setHex(0xffffff);
+		}
+	}
 	
 	render();
-	requestAnimationFrame(function(timestamp) {
-		BFS(graph, q, visited, node);
-	});
+	setTimeout(() => {requestAnimationFrame(function(timestamp) {
+		DFS(graph, stack, visited, node);})}, 500);
+}	
+
+function DFS2(graph, visited, node)
+{
+	let i;
+	
+	console.log("This is the node and nodeCount " + node + " " + graph.nodeCount);
+	if (node >= graph.nodeCount)
+		return;
+	
+	visited[node] = 1;
+	
+	graph.nodes[node].material.color.setHex(0x43ff0a);
+	
+	if (node == 0)
+		graph.nodes[node].material.color.setHex(0xffffff);
+	
+	for (i = 0; i < graph.nodeCount; i++)
+	{
+		console.log("This is the loop varialble in DFS" + i);
+		if (graph.cloneAdjMatrix[node][i] && !visited[i])
+		{
+			render();
+			requestAnimationFrame(function(timestamp){
+			DFS(graph, visited, i);});
+			//render();
+			//requestAnimationFrame(function(timestamp) {
+			//	DFS(graph, visited, node);
+			//});
+		}
+		// Becasues we do not return from a call back function we have to return somehow.
+		
+		if (graph.adjMatrix[node][i] == 1)
+		{
+			let key1 = 10 * node + i;
+			graph.linkMap.get(key1).material.color.setHex(0xffffff);
+		}
+		
+	}
 }

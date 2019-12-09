@@ -17,6 +17,9 @@ function initGUI(graph)
 		PATHFINDING : {
 			BFS : function() 
 			{
+				for (const entry of graph.linkMap.entries()) {
+					console.log(entry);
+				}
 				let q = new Queue();
 				let visited = new Array(graph.nodeCount);
 				let count1 = 0;
@@ -25,12 +28,43 @@ function initGUI(graph)
 				visited[0] = 1;
 				BFS(graph, q, visited, 0);/* Calls Breadth First Search Function*/
 			}, 
-			DFS : function() {/* Calls Depth First Search Function*/}
+			DFS : function() 
+			{
+				/* Calls Depth First Search Function*/
+				let visited = new Array(graph.nodeCount);
+				let stack = new Stack();
+				let i;
+				
+				for (i = 0; i < graph.nodeCount; i++)
+				{
+					visited[i] = 0;
+				}
+				
+				stack.push(0); // Start at 0
+				DFS(graph, stack, visited, 0);
+			}
 		},
 		
 		SHORTESTPATH : {
 			Dijkstra : function() {/* Calls Breadth First Search Function*/}, 
 			Bellman : function() {/* Calls Breadth First Search Function*/}
+		},
+		
+		CLEAR: 
+		function()
+		{
+			let i;
+			
+			for (const entry of graph.linkMap.keys())
+			{
+				graph.linkMap.get(entry).material.color.setHex(0x0000ff);
+			}
+			
+			for (i = 0; i < graph.nodeCount; i++)
+			{
+				graph.nodes[i].material.color.setHex(0xff5757);
+			}
+			render();
 		}
 	
 		//START : 
@@ -43,7 +77,7 @@ function initGUI(graph)
 	// Adds property to GUI for scaling the rendered object
 	guiController.add(guiObject, "NODES")
 	.name("# of Nodes")
-	.min(2).max(50).step(2)
+	.min(2).max(16).step(2)
 	.onFinishChange(
 		function(val)
 		{
@@ -54,6 +88,8 @@ function initGUI(graph)
 			
 		}
 	);
+	
+	guiController.add(guiObject, "CLEAR").name("Clear Changes");
 	
 	
 	// Adds property to GUI for translating the rendered object along x, y, and z axes.

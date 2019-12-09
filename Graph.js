@@ -91,7 +91,7 @@ class Graph
 				// If i is less than 20 percent of our maximum nodes then
 				// we can assign it more links. Otherwise we dont
 				// want 8 links per node etc.
-				if (i < Math.round(nodeCount * 0.2))
+				if (i < Math.round(nodeCount * 0.1))
 				{
 					let edge = Math.round(Math.random());
 					
