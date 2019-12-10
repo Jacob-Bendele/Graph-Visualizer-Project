@@ -1,8 +1,10 @@
+// Jacob Bendele ja644123
+// Final Project Code
+
 function BFS(graph, q, visited, node)
 {	
 	if (q.isEmpty())
 	{
-		console.log("We exited the BFS animate");
 		return;
 	}
 	
@@ -11,33 +13,13 @@ function BFS(graph, q, visited, node)
 	
 	if (node == 0)
 		graph.nodes[node].material.color.setHex(0xffffff);
-	console.log("This is the dequeue node " + node);
-	
-	//if (count1 == graph.nodeCount)
-		//count1 = 0;
-	
-	
-	
-	//console.log("THIS IS THE FUCKING COUNT " + count1);
 	
 	for (let i = 0; i < graph.nodeCount; i++)
 	{
 		if (graph.cloneAdjMatrix[node][i] && !visited[i])
 		{
 			visited[i] = 1; 
-			
 			q.enqueue(i);
-			
-			// Problem is that we end up with a node i combo that is otherwise zero and not added to our linkMap
-			// So it is necessary to 
-			
-			
-			//console.log("This is the key Value " + key1);
-			console.log("This is the node for the key value " + i);
-			
-			console.log("Q has benn added");
-			
-			
 		}
 			
 		if (graph.adjMatrix[node][i] == 1)
@@ -50,9 +32,6 @@ function BFS(graph, q, visited, node)
 	render();
 	setTimeout(() => {requestAnimationFrame(function(timestamp) {
 		BFS(graph, q, visited, node);})}, 500);
-		
-	//requestAnimationFrame(function(timestamp) {
-	//	BFS(graph, q, visited, node)});
 }
 
 function DFS(graph, stack, visited, node)
@@ -60,7 +39,6 @@ function DFS(graph, stack, visited, node)
 	if (stack.isEmpty())
 		return; 
 	
-
 	node = stack.pop();
 	
 	graph.nodes[node].material.color.setHex(0x43ff0a);
@@ -77,20 +55,7 @@ function DFS(graph, stack, visited, node)
 	{
 		if (graph.cloneAdjMatrix[node][i] && !visited[i])
 		{
-			//visited[i] = 1; 
-			
 			stack.push(i); // push the unvisited node that has a link on it to the stack
-			
-			// Problem is that we end up with a node i combo that is otherwise zero and not added to our linkMap
-			// So it is necessary to 
-			
-			
-			//console.log("This is the key Value " + key1);
-			console.log("This is the node for the key value " + i);
-			
-			console.log("Q has benn added");
-			
-			
 		}
 			
 		if (graph.adjMatrix[node][i] == 1)
@@ -128,7 +93,6 @@ function calcDistance(graph)
 			else
 				matrix[i][j] = 0;
 		}
-
 	}
 	
 	return matrix;
@@ -151,15 +115,18 @@ function dijkstra(start, matrix, graph, end)
 	distance.fill(1000000); // infinte
 	distance[start] = 0;
 	
+	let ol = document.createElement("ol");
+	document.getElementById("info").appendChild(ol);
 	
 	
 	if (start == 0)
+	{	
+		render();
 		graph.nodes[start].material.color.setHex(0xffffff);
-	
+	}
 	
 	for (let i = 0; i < graph.nodeCount; i++)
 	{
-		//let vertex = new QElement(i, distance[i]);
 		pq.enqueue(i, distance[i]); 
 	}
 	
@@ -170,34 +137,22 @@ function dijkstra(start, matrix, graph, end)
 		if (visited[vertex.element]) 
 			continue;
 		
-		visited[vertex.element] = true; // true
-		console.log("This is the vertex " + vertex.element + " " + vertex.priority);
-		
+		visited[vertex.element] = true;
+		let li = document.createElement("li");
+		let text = document.createTextNode("Node " + vertex.element + " " + "Distance " + vertex.priority);
+		li.appendChild(text);
+		ol.appendChild(li);
 		numVisited++;
 		
 		for (let i = 0; i < graph.nodeCount; i++)
 		{
 			if (matrix[vertex.element][i] > 0 && distance[vertex.element] + matrix[vertex.element][i] < distance[i])
 			{
-				console.log(end);
-				console.log("This is the vertex with a short path" + vertex.element);
-				if (vertex.element == end)
-				{
-					console.log(" we vertec elemented " + i );
-					path.push(i);
-					console.log(path);
-				}
-					
 				distance[i] = distance[vertex.element] + matrix[vertex.element][i];
 				pq.enqueue(i, distance[i]);
 			}
 		}
-	
-		
-		
 	}
-	
-	return path;
 }
 
 

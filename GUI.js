@@ -50,16 +50,26 @@ function initGUI(graph)
 				
 				/* Calls Breadth First Search Function*/
 				let matrix = calcDistance(graph);
-				let path = dijkstra(0, matrix, graph, graph.nodeCount - 1);
-				console.log(path);
+				dijkstra(0, matrix, graph, graph.nodeCount - 1);
+				render();
 				
-			}, 
-			Bellman : function() {/* Calls Breadth First Search Function*/}
+				
+			}
+			//Bellman : function() {/* Calls Breadth First Search Function*/}
 		},
 		
 		CLEAR: 
 		function()
 		{
+			let e = document.querySelector("div");
+			let child = e.lastElementChild;
+			
+			while (child)
+			{
+				e.removeChild(child);
+				child.e.lastElementChild;
+
+			}
 			
 			for (const entry of graph.linkMap.keys())
 			{
@@ -83,7 +93,7 @@ function initGUI(graph)
 	// Adds property to GUI for scaling the rendered object
 	guiController.add(guiObject, "NODES")
 	.name("# of Nodes")
-	.min(2).max(16).step(2)
+	.min(2).max(12).step(2)
 	.onFinishChange(
 		function(val)
 		{
@@ -105,7 +115,7 @@ function initGUI(graph)
 	
 	shortestPath.add(guiObject.SHORTESTPATH, "Dijkstra").name("Dijkstra");
 
-	shortestPath.add(guiObject.SHORTESTPATH, "Bellman").name("Bellman");
+	//shortestPath.add(guiObject.SHORTESTPATH, "Bellman").name("Bellman");
 	
 	//.add(guiObject, "START").name("Run Algorithm");
 	

@@ -18,8 +18,6 @@ function ead84(nodeCount, nodes, links)
 		render();
 	}*/
 	
-		
-	//console.log("nodeCount is " + nodeCount);
 	for (let row = 0; row < nodeCount; row++)
 	{	
 		for (let col = 0; col < nodeCount; col++)
@@ -28,37 +26,23 @@ function ead84(nodeCount, nodes, links)
 			
 			if (row == col)
 			{
-				console.log("we continued");
 				continue;
 			}
-			//console.log("We made it here");
+			
 			let nodeA = nodes[row].position;
 			let nodeB = nodes[col].position;
 			
 			d = Math.abs(nodeA.distanceTo(nodeB));
 			
-			//console.log("distance" + " is " + d);
-			
 			// Repulsive force
 			if (links[row][col] == 0)
 			{
 				force = c4 * (c3 / (d * d));
-				
-				//console.log("Repulsive Force " + force);
-				//console.log("Links repulse " + links[row][col]);
 		
 				let translateVector = new THREE.Vector3(0, 0, 0);
 				translateVector.setX(nodes[row].position.x - nodes[col].position.x);
 				translateVector.setY(nodes[row].position.y - nodes[col].position.y);
 				translateVector.setZ(nodes[row].position.z - nodes[col].position.z);
-				
-
-				//console.log("Translate Vector " + translateVector.x + " " + translateVector.y + " " + translateVector.z);
-				//console.log("translate normalized vec " + translateVector.normalize().length());
-				//console.log("Col Point/Vec " + nodes[col].position.x + " " + nodes[col].position.y + " " + nodes[col].position.z);
-				//console.log("Row Point/Vec " + nodes[row].position.x + " " + nodes[row].position.y + " " + nodes[row].position.z);
-				//console.log("distance vec" + " is " + d);
-				
 				
 				nodes[row].translateOnAxis(translateVector.normalize(), force);
 			}
@@ -67,9 +51,6 @@ function ead84(nodeCount, nodes, links)
 			else
 			{
 				force = c4 * (c1 * Math.log(d / c2));
-				
-				//console.log("Attractive Force " + force);
-				//console.log("Links attractive " + links[row][col]);
 				
 				let translateVector = new THREE.Vector3(0, 0, 0);
 				translateVector.setX(nodes[col].position.x - nodes[row].position.x);
@@ -88,37 +69,28 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 {
 	for (let i = 0; i < nodeCount; i++)
 	{	
-		//console.log(adjMatrix[i].toString());
 		for (let j = 0; j < nodeCount; j++)
 		{
 			if (adjMatrix[i][j] == 1)
 			{
 				let key = i * 10 + j;
-				
-				//i = 10 j = 5
-				//j = 5 i = 10 
-				
-				//10 * 10 + 5 = key = 105
-				//key = 10 * 5 + 10 = 60
-				
+
 				let currentLink = linkMap.get(key);
 				
 				scene.remove(scene.getObjectById(currentLink.id));
 				
 				let material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 				let geometry = new THREE.Geometry();
+				
 				geometry.vertices.push(new THREE.Vector3( nodes[i].position.x, nodes[i].position.y, nodes[i].position.z) );
 				geometry.vertices.push(new THREE.Vector3( nodes[j].position.x, nodes[j].position.y, nodes[j].position.z) );
-				//geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
+			
 				let line = new THREE.Line( geometry, material );
 				
 				linkMap.delete(key);
 				linkMap.set(key, line);
 				
-				
-				
 				scene.add( line );
-				////console.log("This is the one you rare looking for " + nodes[i].position.x);
 			}
 		}
 	}
@@ -127,18 +99,13 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 let count = 0;
 function animate(graph)
 {
-	//console.log("This is the count " + count);
 	if (count == 100)
 	{	
-		//graph.centerCamera();
-		//console.log("Returned out of animate");
 		return;
 	}
 	
-	
 	ead84(graph.nodeCount, graph.nodes, graph.adjMatrix);
 	updateLinks(graph.linkMap, graph.nodeCount, graph.nodes, graph.adjMatrix); 
-	//drawLinks(g1.nodeCount
 	
 	count++;
 	

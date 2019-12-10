@@ -116,16 +116,10 @@ class Graph
 					console.log(this.nodeCount - i - 1);
 					links[i][this.nodeCount - i - 1] = 1;
 					links[this.nodeCount - i - 1][i] = 1;
-					
-					//console.log("ENCOUNTERED AN EMPTY LINK ROW");
-					//console.log(links[i][nodeCount - i - 1]);
-					//console.log(links[nodeCount - i - 1][i]);
 				}
 			}
 			unconnected = 0;
 		}
-
-		
 		return links;
 	}
 	

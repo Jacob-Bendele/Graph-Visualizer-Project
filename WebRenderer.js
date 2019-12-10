@@ -1,6 +1,5 @@
-// Name: Jacob Bendele NID: Ja644123
-// Course: CAP4720 Fall 2019
-// Assignment: Assignment #3
+// Jacob Bendele ja644123
+// Final Project Code
 
 "use strict";
 
@@ -9,10 +8,6 @@ let scene, camera, renderer, cameraControls;
 
 let WIDTH = window.innerWidth;
 let HEIGHT = window.innerHeight;
-
-// Initialize everything the Renderer needs and render.
-//init();
-//render();
 
 function init()
 {

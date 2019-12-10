@@ -1,4 +1,6 @@
-// Queue Class
+// Jacob Bendele ja644123
+// Final Project Code
+
 class Queue
 {
 	constructor()
