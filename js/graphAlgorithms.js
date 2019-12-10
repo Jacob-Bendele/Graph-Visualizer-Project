@@ -1,6 +1,8 @@
 // Jacob Bendele ja644123
 // Final Project Code
 
+// Breadth First Seach implemented with a queue
+// Function also takes the place of an animation loop to visualize BFS
 function BFS(graph, q, visited, node)
 {	
 	if (q.isEmpty())
@@ -34,6 +36,8 @@ function BFS(graph, q, visited, node)
 		BFS(graph, q, visited, node);})}, 500);
 }
 
+// Depth First Seach implemented with a stack to alleviate recursion
+// Function also takes the place of an animation loop to visualize DFS
 function DFS(graph, stack, visited, node)
 {
 	if (stack.isEmpty())
@@ -70,6 +74,7 @@ function DFS(graph, stack, visited, node)
 		DFS(graph, stack, visited, node);})}, 500);
 }	
 
+// Calculates distances for the nodes to be used as weights
 function calcDistance(graph)
 {
 	let matrix = new Array(graph.nodeCount);
@@ -87,22 +92,18 @@ function calcDistance(graph)
 			{
 				
 				 matrix[i][j] = graph.nodes[i].position.distanceTo(graph.nodes[j].position);
-				 console.log("This is the matrix distance associated with " + matrix[i][j]);
 			}
 			
 			else
 				matrix[i][j] = 0;
 		}
 	}
-	
 	return matrix;
 }
 
 
 // This version of dijkstra is going to find the shortest path to all nodes.
-// Therefore a list of the shortest paths can be returned and either the shortest path can be displayed
-// or a gradient of color can be observed with the most intense being the shortest path to the last
-// element.
+// A list is generated as Dijkstra's is very similar to BFS visually.
 function dijkstra(start, matrix, graph, end)
 {
 	let distance = new Array(graph.nodeCount);
@@ -115,13 +116,13 @@ function dijkstra(start, matrix, graph, end)
 	distance.fill(1000000); // infinte
 	distance[start] = 0;
 	
+	// Creates ordered list that will display the shortest paths
 	let ol = document.createElement("ol");
 	document.getElementById("info").appendChild(ol);
 	
-	
+	// Signal start node
 	if (start == 0)
 	{	
-		render();
 		graph.nodes[start].material.color.setHex(0xffffff);
 	}
 	

@@ -1,3 +1,8 @@
+// Jacob Bendele ja644123
+// Final Project Code
+
+// Graph class that takes care of random generation and 3D initalization of
+// a undirected graph
 class Graph
 {
 	
@@ -6,16 +11,12 @@ class Graph
 		this.nodeCount = nodeCount;
 		this.nodes = this.generateNodes();
 		this.adjMatrix = this.generateAdjMatrix();
-		
-		// This clone is currently necessary as the initilization of links
-		// zeros out the [i][j] [j][i] pairs as to not render to links
-		// for other computations it is necessary to have these present.
 		this.cloneAdjMatrix = this.copyAdjMatrix();
 		this.linkMap = this.initLinks();
 		//this.printAdjMatrix(this.nodeCount, this.adjMatrix)
-		
 	}
 	
+	// Randomly generates a number of nodes withint a 500 x 500 x 500 3D space
 	generateNodes()
 	{
 		let nodes = new Array(this.nodeCount);
@@ -36,6 +37,7 @@ class Graph
 			sphere.position.y = posy;
 			sphere.position.z = posz;
 			
+			// Vector addition to later be averaged to find center for camera
 			center.add(sphere.position);
 			
 			nodes[i] = sphere;
@@ -44,6 +46,7 @@ class Graph
 			scene.add(sphere);
 		}
 		
+		// Bascially center of mass calculation, but for camera look target
 		center.multiplyScalar(1/this.nodeCount);
 		cameraControls.target = (center);
 		cameraControls.update();
@@ -51,6 +54,7 @@ class Graph
 		return nodes;
 	}
 	
+	// Generates an adjacency matrix for our nodes
 	generateAdjMatrix()
 	{
 		let links = new Array(this.nodeCount);
@@ -71,9 +75,8 @@ class Graph
 				}
 				
 				// If i is less than 20 percent of our maximum nodes then
-				// we can assign it more links. Otherwise we dont
-				// want 8 links per node etc.
-				if (i < Math.round(this.nodeCount * 0.1))
+				// we can assign it more links.
+				if (i < Math.round(this.nodeCount * 0.2))
 				{
 					let edge = Math.round(Math.random());
 					
@@ -90,7 +93,7 @@ class Graph
 						links[j][i] = 1;
 					}
 					
-					// Not 1 so must be zero
+					// No link generated so fill with a zero
 					else 
 					{
 						links[i][j] = 0;
@@ -100,6 +103,7 @@ class Graph
 			}
 		}
 		
+		// Loop through the adjacency matrix and find nodes without links
 		for (let i = 0; i < this.nodeCount; i++)
 		{	
 			for (let j = 0; j < this.nodeCount; j++)
@@ -111,8 +115,6 @@ class Graph
 				
 				if (unconnected == this.nodeCount)
 				{
-					console.log("This is unconnected : " + unconnected);
-					console.log(i);
 					console.log(this.nodeCount - i - 1);
 					links[i][this.nodeCount - i - 1] = 1;
 					links[this.nodeCount - i - 1][i] = 1;
@@ -123,6 +125,7 @@ class Graph
 		return links;
 	}
 	
+	// Creates a copy of the adjacency matrix since JS passes objects by reference
 	copyAdjMatrix()
 	{
 		let cloneAdjMatrix = new Array(this.nodeCount);
@@ -144,39 +147,37 @@ class Graph
 	
 	// TODO: Change to "initEdges" and edgeMap: more instantly readable in the context of 
 	// a graph.
+	// Initializes the links in 3D space
 	initLinks()
 	{
 		let linkMap = new Map();
 		
-		//console.log("Init function");
-		
+		// Loop through the adjacency matrix
 		for (let i = 0; i < this.nodeCount; i++)
 		{	
-			//console.log(adjMatrix[i].toString());
 			for (let j = 0; j < this.nodeCount; j++)
 			{
 				
 				if (this.adjMatrix[i][j] == 1)
 				{
-					this.adjMatrix[j][i] = 0; // Keeps from drawing two lines
+					this.adjMatrix[j][i] = 0; // Keeps from drawing two links
 					
 					let material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 					let geometry = new THREE.Geometry();
+					
 					geometry.vertices.push(new THREE.Vector3( this.nodes[i].position.x, this.nodes[i].position.y, this.nodes[i].position.z) );
 					geometry.vertices.push(new THREE.Vector3( this.nodes[j].position.x, this.nodes[j].position.y, this.nodes[j].position.z) );
 
 					let line = new THREE.Line( geometry, material );
 					
+					// Adds the link to a Hashmap for later reference
 					let key = i * 10 + j;
-					
 					linkMap.set(key, line);
 					
 					scene.add( line );
 				}
 			}
 		}
-		console.log("After init zero");
-		
 		return linkMap;
 	}
 	

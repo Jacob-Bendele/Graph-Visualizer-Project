@@ -3,37 +3,37 @@
 <!doctype html>
 <html>
 	<head>
-	<style>
-		body {
-			margin: 0;
-			background-color: #000;
-			color: #fff;
-			font-family: Monospace;
-			font-size: 13px;
-			line-height: 24px;
-			overscroll-behavior: none;
-		}
-		
-		ol li {
-			list-style: none;
-		}
+		<style>
+			body {
+				margin: 0;
+				background-color: #000;
+				color: #fff;
+				font-family: Monospace;
+				font-size: 13px;
+				line-height: 24px;
+				overscroll-behavior: none;
+			}
+			
+			ol li {
+				list-style: none;
+			}
 
 
-		#info {
-			position: absolute;
-			top: 0px;
-			width: 100%;
-			padding: 10px;
-			box-sizing: border-box;
-			text-align: center;
-			-moz-user-select: none;
-			-webkit-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
-			pointer-events: none;
-			z-index: 1; /* TODO Solve this in HTML */
-		}
-	</style>
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				padding: 10px;
+				box-sizing: border-box;
+				text-align: center;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+				z-index: 1; /* TODO Solve this in HTML */
+			}
+		</style>
 		<meta charset="utf-8">
 		<script src="https://threejs.org/build/three.min.js"></script>
 		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
@@ -41,14 +41,12 @@
 	</head>
 	<body>
 		<div id="info"></div>
-		<script src="./webRenderer.js"></script>
-		<script src="./graph.js"></script>
-		<script src="./force.js"></script>
-		<script src="./dataStructures.js"></script>
-		<script src="./graphAlgorithms.js"></script>
-		<script src="./gui.js"></script>
-		<script src="./index.js"></script>
-		
-		
+		<script src="./js/webRenderer.js"></script>
+		<script src="./js/graph.js"></script>
+		<script src="./js/force.js"></script>
+		<script src="./js/dataStructures.js"></script>
+		<script src="./js/graphAlgorithms.js"></script>
+		<script src="./js/gui.js"></script>
+		<script src="./js/index.js"></script>
 	</body>
 </html>

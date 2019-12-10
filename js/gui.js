@@ -1,3 +1,7 @@
+// Jacob Bendele ja644123
+// Final Project Code
+
+//Initializes a DAT GUI to interact with the graph
 function initGUI(graph)
 {	
 	// Creates instance of dat.GUI
@@ -9,7 +13,7 @@ function initGUI(graph)
 	//let nodes = guiController.addFolder("Nodes");
 
 	
-	// Creates GUIobject
+	// Creates GUIobject for DAT GUI functionality
 	let guiObject = {
 		
 		NODES : graph.nodeCount,
@@ -17,20 +21,23 @@ function initGUI(graph)
 		PATHFINDING : {
 			BFS : function() 
 			{
-				for (const entry of graph.linkMap.entries()) {
-					console.log(entry);
-				}
+				// Setup and Calls Breadth First Search Function
 				let q = new Queue();
 				let visited = new Array(graph.nodeCount);
 				let count1 = 0;
 				
 				q.enqueue(0);
 				visited[0] = 1;
-				BFS(graph, q, visited, 0);/* Calls Breadth First Search Function*/
+				BFS(graph, q, visited, 0);
+				
+				//for (const entry of graph.linkMap.entries()) {
+				//	console.log(entry);
+				//}
 			}, 
+			
 			DFS : function() 
 			{
-				/* Calls Depth First Search Function*/
+				// Setup and Calls Depth First Search Function
 				let visited = new Array(graph.nodeCount);
 				let stack = new Stack();
 				
@@ -39,7 +46,7 @@ function initGUI(graph)
 					visited[i] = 0;
 				}
 				
-				stack.push(0); // Start at 0
+				stack.push(0); // Start at node 0
 				DFS(graph, stack, visited, 0);
 			}
 		},
@@ -47,20 +54,29 @@ function initGUI(graph)
 		SHORTESTPATH : {
 			Dijkstra : function() 
 			{
-				
-				/* Calls Breadth First Search Function*/
+				// Setup and Calls Dijkstra Function
 				let matrix = calcDistance(graph);
 				dijkstra(0, matrix, graph, graph.nodeCount - 1);
 				render();
-				
-				
 			}
 			//Bellman : function() {/* Calls Breadth First Search Function*/}
 		},
 		
-		CLEAR: 
-		function()
-		{
+		CLEAR: function()
+		{			
+			// Clears link color changes
+			for (const entry of graph.linkMap.keys())
+			{
+				graph.linkMap.get(entry).material.color.setHex(0x0000ff);
+			}
+			
+			// Clears node color changes
+			for (let i = 0; i < graph.nodeCount; i++)
+			{
+				graph.nodes[i].material.color.setHex(0xff5757);
+			}
+			
+			// Clears generaed HTML tags
 			let e = document.querySelector("div");
 			let child = e.lastElementChild;
 			
@@ -70,27 +86,12 @@ function initGUI(graph)
 				child.e.lastElementChild;
 
 			}
-			
-			for (const entry of graph.linkMap.keys())
-			{
-				graph.linkMap.get(entry).material.color.setHex(0x0000ff);
-			}
-			
-			for (let i = 0; i < graph.nodeCount; i++)
-			{
-				graph.nodes[i].material.color.setHex(0xff5757);
-			}
+
 			render();
-		}
-	
-		//START : 
-		//function(){
-			
-		//}
-				
+		}		
 	};
 	
-	// Adds property to GUI for scaling the rendered object
+	// Adds properties and functionalities to GUI from the guiObject
 	guiController.add(guiObject, "NODES")
 	.name("# of Nodes")
 	.min(2).max(12).step(2)
@@ -106,48 +107,8 @@ function initGUI(graph)
 	);
 	
 	guiController.add(guiObject, "CLEAR").name("Clear Changes");
-	
-	
-	// Adds property to GUI for translating the rendered object along x, y, and z axes.
 	pathTraversal.add(guiObject.PATHFINDING, "BFS").name("BFS");
-	
 	pathTraversal.add(guiObject.PATHFINDING, "DFS").name("DFS");
-	
 	shortestPath.add(guiObject.SHORTESTPATH, "Dijkstra").name("Dijkstra");
-
 	//shortestPath.add(guiObject.SHORTESTPATH, "Bellman").name("Bellman");
-	
-	//.add(guiObject, "START").name("Run Algorithm");
-	
-	// Adds properties to GUI for Key Light
-	/*keyLightFolder.add(guiObject.KEY, "visKey")
-	.name("Key Light On/Off")
-	.onChange(
-		function(flag)
-		{
-			keyLight.visible = flag;
-			render();
-		}
-	);
-	
-	keyLightFolder.add(guiObject.KEY, "intensKey")
-	.min(0).max(1).step(0.1)
-	.name("Key Intensity")
-	.onChange(
-		function(val)
-		{
-			keyLight.intensity = val;
-			render();
-		}
-	);
-	
-	keyLightFolder.addColor(guiObject.KEY, "colorKey")
-	.name("Key Color")
-	.onChange(
-		function(hexstring)
-		{
-			keyLight.color.set(hexstring)
-			render();
-		}
-	);*/
 }

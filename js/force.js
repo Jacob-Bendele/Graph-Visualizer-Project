@@ -1,6 +1,9 @@
+// Jacob Bendele ja644123
+// Final Project Code
+
+// Basic force layout function "Eades"
 function ead84(nodeCount, nodes, links)
 {
-	console.log("Entered ead84");
 	let  c1 = 2, c2 = 0.001, c3 = 100000, c4 = 0.1, d;
 	let force = 0; 
 	
@@ -17,7 +20,8 @@ function ead84(nodeCount, nodes, links)
 		scene.add(sphere);
 		render();
 	}*/
-	
+
+	// Loops over the adjacency matrix
 	for (let row = 0; row < nodeCount; row++)
 	{	
 		for (let col = 0; col < nodeCount; col++)
@@ -29,12 +33,13 @@ function ead84(nodeCount, nodes, links)
 				continue;
 			}
 			
+			// Finds distance between two nodes
 			let nodeA = nodes[row].position;
 			let nodeB = nodes[col].position;
 			
 			d = Math.abs(nodeA.distanceTo(nodeB));
 			
-			// Repulsive force
+			// If there is no link between nodes generate a repulsive force
 			if (links[row][col] == 0)
 			{
 				force = c4 * (c3 / (d * d));
@@ -44,10 +49,11 @@ function ead84(nodeCount, nodes, links)
 				translateVector.setY(nodes[row].position.y - nodes[col].position.y);
 				translateVector.setZ(nodes[row].position.z - nodes[col].position.z);
 				
+				// Translate the node in the direction of the force
 				nodes[row].translateOnAxis(translateVector.normalize(), force);
 			}
 
-			// Attractive force
+			// If there is a link between nodes generate an attractive force
 			else
 			{
 				force = c4 * (c1 * Math.log(d / c2));
@@ -57,14 +63,14 @@ function ead84(nodeCount, nodes, links)
 				translateVector.setY(nodes[col].position.y - nodes[row].position.y);
 				translateVector.setZ(nodes[col].position.z - nodes[row].position.z);
 
+				// Translate the node in the direction of the force
 				nodes[row].translateOnAxis(translateVector.normalize(), force);
 			}
 		}
 	}
 }
 	
-	
-// eventually for reusability it would be preffered to have this take a grph as a paramter instead of call on hardcoded graph
+// Takes graph parameters and moves each link after a force is applied to a node
 function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 {
 	for (let i = 0; i < nodeCount; i++)
@@ -96,9 +102,12 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 	}
 }
 
+// Animation loop for the force direction
 let count = 0;
 function animate(graph)
 {
+	// Count is a magic number that the algorithm describes as coolness.
+	// At some iteration the graph will settle; 100 is this coolness value.
 	if (count == 100)
 	{	
 		return;

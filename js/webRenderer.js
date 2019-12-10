@@ -16,7 +16,6 @@ function init()
 	initRenderer();
 	initScene();
 	eventHandlers();
-	//initGUI();
 }
 
 function initRenderer()
@@ -32,12 +31,12 @@ function initRenderer()
 
 function initScene()
 {
-	// Initializes everything a scene needs; Camera, Geometry, and Lights.
+	// Initializes everything a scene needs; Camera and Lights.
 	initCamera();
-	//initGeometry();
 	initLight();
 }
 
+// Clears the scene of all rendered objects
 function clearScene()
 {
 	while (scene.children.length > 0)
