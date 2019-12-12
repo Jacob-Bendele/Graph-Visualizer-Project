@@ -25,10 +25,11 @@ function initGUI(graph)
 				let q = new Queue();
 				let visited = new Array(graph.nodeCount);
 				let count1 = 0;
+				let linkQ = new Queue();
 				
 				q.enqueue(0);
 				visited[0] = 1;
-				BFS(graph, q, visited, 0);
+				BFS(graph, q, visited, 0, linkQ);
 				
 				//for (const entry of graph.linkMap.entries()) {
 				//	console.log(entry);
@@ -40,6 +41,7 @@ function initGUI(graph)
 				// Setup and Calls Depth First Search Function
 				let visited = new Array(graph.nodeCount);
 				let stack = new Stack();
+				let linkStack = new Stack();
 				
 				for (let i = 0; i < graph.nodeCount; i++)
 				{
@@ -47,7 +49,7 @@ function initGUI(graph)
 				}
 				
 				stack.push(0); // Start at node 0
-				DFS(graph, stack, visited, 0);
+				DFS(graph, stack, visited, 0, linkStack);
 			}
 		},
 		
@@ -78,12 +80,11 @@ function initGUI(graph)
 			
 			// Clears generaed HTML tags
 			let e = document.querySelector("div");
-			let child = e.lastElementChild;
+			let child = e.childNodes;
 			
-			while (child)
+			for (let i = 0; i < child.length; i++)
 			{
-				e.removeChild(child);
-				child.e.lastElementChild;
+				e.removeChild(child[i]);
 
 			}
 

@@ -4,7 +4,12 @@
 <html>
 	<head>
 		<style>
-			body {
+			canvas 
+			{
+				display: block; /* fix necessary to remove space at bottom of canvas */
+			}
+			body 
+			{
 				margin: 0;
 				background-color: #000;
 				color: #fff;
@@ -14,12 +19,14 @@
 				overscroll-behavior: none;
 			}
 			
-			ol li {
+			ol li 
+			{
 				list-style: none;
 			}
 
 
-			#info {
+			#dijkstra 
+			{
 				position: absolute;
 				top: 0px;
 				width: 100%;
@@ -31,7 +38,24 @@
 				-ms-user-select: none;
 				user-select: none;
 				pointer-events: none;
-				z-index: 1; /* TODO Solve this in HTML */
+				z-index: 1;
+			}
+			
+			#info 
+			{
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				padding: 10px;
+				margin-top: 85vh;
+				box-sizing: border-box;
+				text-align: center;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+				z-index: 1;
 			}
 		</style>
 		<meta charset="utf-8">
@@ -40,7 +64,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
 	</head>
 	<body>
-		<div id="info"></div>
+		<div id="dijkstra"></div>
+		<p id="info">Controls: Click and drag to rotate graph. Scroll to zoom in and out. Explore the GUI to run algorithms, generate a graph with a specific node count, and clear changes.</p>
 		<script src="./js/webRenderer.js"></script>
 		<script src="./js/graph.js"></script>
 		<script src="./js/force.js"></script>

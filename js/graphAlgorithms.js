@@ -3,75 +3,97 @@
 
 // Breadth First Seach implemented with a queue
 // Function also takes the place of an animation loop to visualize BFS
-function BFS(graph, q, visited, node)
+function BFS(graph, q, visited, node, linkQ)
 {	
-	if (q.isEmpty())
+	let key1;
+	
+	if (q.isEmpty() && linkQ.isEmpty())
 	{
 		return;
 	}
 	
-	node = q.dequeue();
-	graph.nodes[node].material.color.setHex(0x43ff0a);
-	
-	if (node == 0)
-		graph.nodes[node].material.color.setHex(0xffffff);
-	
-	for (let i = 0; i < graph.nodeCount; i++)
+	if (!linkQ.isEmpty())
 	{
-		if (graph.cloneAdjMatrix[node][i] && !visited[i])
-		{
-			visited[i] = 1; 
-			q.enqueue(i);
-		}
-			
-		if (graph.adjMatrix[node][i] == 1)
-		{
-			let key1 = 10 * node + i;
-			graph.linkMap.get(key1).material.color.setHex(0xffffff);
-		}
+		let link = linkQ.dequeue();
+		link.material.color.setHex(0xffffff);
 	}
 	
+	if (!q.isEmpty())
+	{
+		node = q.dequeue();
+		graph.nodes[node].material.color.setHex(0x43ff0a);
+
+		if (node == 0)
+			graph.nodes[node].material.color.setHex(0xffffff);
+		
+		for (let i = 0; i < graph.nodeCount; i++)
+		{
+			if (graph.cloneAdjMatrix[node][i] && !visited[i])
+			{
+				visited[i] = 1; 
+				q.enqueue(i);
+			}
+			
+			if (graph.adjMatrix[node][i] == 1)
+			{
+				key1 = node * 10 + i;
+				linkQ.enqueue(graph.linkMap.get(key1));
+			}
+		}
+	}
+		
 	render();
 	setTimeout(() => {requestAnimationFrame(function(timestamp) {
-		BFS(graph, q, visited, node);})}, 500);
+		BFS(graph, q, visited, node, linkQ);})}, 500);
 }
 
 // Depth First Seach implemented with a stack to alleviate recursion
 // Function also takes the place of an animation loop to visualize DFS
-function DFS(graph, stack, visited, node)
+function DFS(graph, stack, visited, node, linkStack)
 {
-	if (stack.isEmpty())
+	let key1;
+	
+	if (stack.isEmpty() && linkStack.isEmpty())
 		return; 
 	
-	node = stack.pop();
-	
-	graph.nodes[node].material.color.setHex(0x43ff0a);
-	
-	if (node == 0)
-		graph.nodes[node].material.color.setHex(0xffffff);
-		
-	if (!visited[node])
-	{
-		visited[node] = 1;
+	if (!linkStack.isEmpty())
+	{	
+		let link = linkStack.pop();
+		link.material.color.setHex(0xffffff);
 	}
 	
-	for (let i = 0; i < graph.nodeCount; i++)
+	if (!stack.isEmpty())
 	{
-		if (graph.cloneAdjMatrix[node][i] && !visited[i])
-		{
-			stack.push(i); // push the unvisited node that has a link on it to the stack
-		}
+		node = stack.pop();
+		
+		graph.nodes[node].material.color.setHex(0x43ff0a);
+		
+		if (node == 0)
+			graph.nodes[node].material.color.setHex(0xffffff);
 			
-		if (graph.adjMatrix[node][i] == 1)
+		if (!visited[node])
 		{
-			let key1 = 10 * node + i;
-			graph.linkMap.get(key1).material.color.setHex(0xffffff);
+			visited[node] = 1;
+		}
+		
+		for (let i = 0; i < graph.nodeCount; i++)
+		{
+			if (graph.cloneAdjMatrix[node][i] && !visited[i])
+			{
+				stack.push(i); // push the unvisited node that has a link on it to the stack
+			}
+				
+			if (graph.adjMatrix[node][i] == 1)
+			{
+				key1 = node * 10 + i;
+				linkStack.push(graph.linkMap.get(key1));
+			}
 		}
 	}
 	
 	render();
 	setTimeout(() => {requestAnimationFrame(function(timestamp) {
-		DFS(graph, stack, visited, node);})}, 500);
+		DFS(graph, stack, visited, node, linkStack);})}, 500);
 }	
 
 // Calculates distances for the nodes to be used as weights
@@ -118,7 +140,7 @@ function dijkstra(start, matrix, graph, end)
 	
 	// Creates ordered list that will display the shortest paths
 	let ol = document.createElement("ol");
-	document.getElementById("info").appendChild(ol);
+	document.getElementById("dijkstra").appendChild(ol);
 	
 	// Signal start node
 	if (start == 0)

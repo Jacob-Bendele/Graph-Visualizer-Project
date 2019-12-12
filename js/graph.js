@@ -42,7 +42,6 @@ class Graph
 			
 			nodes[i] = sphere;
 			
-			
 			scene.add(sphere);
 		}
 		
@@ -76,7 +75,7 @@ class Graph
 				
 				// If i is less than 20 percent of our maximum nodes then
 				// we can assign it more links.
-				if (i < Math.round(this.nodeCount * 0.2))
+				if (i < Math.round(this.nodeCount * 0.1))
 				{
 					let edge = Math.round(Math.random());
 					
@@ -115,7 +114,6 @@ class Graph
 				
 				if (unconnected == this.nodeCount)
 				{
-					console.log(this.nodeCount - i - 1);
 					links[i][this.nodeCount - i - 1] = 1;
 					links[this.nodeCount - i - 1][i] = 1;
 				}
