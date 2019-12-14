@@ -8,12 +8,11 @@ Upon start the graph will begin to transform and layout. Once this operation is 
 4. View the output of a new graph with specified node count
 
 # Running an Algorithm:
-5. Allow graph to settle (very important or else there will be a lot of visual artifacts)
-6. In the GUI select a folder to drop down
-7. Click on DFS, BFS, or Dijkstra
-8. View the output
-9. Click the Clear Button to erase visual changes to the graph and output
-   1. When using Dijkstra click the clear button twice
+1. Allow graph to settle (very important or else there will be a lot of visual artifacts)
+2. In the GUI select a folder to drop down
+3. Click on DFS, BFS, or Dijkstra
+4. View the output
+5. Click the Clear Button to erase visual changes to the graph and output
 
 # Classes and Data Structures:
 * Queue: Used to implement Breadth First Search.
