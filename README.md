@@ -1,7 +1,7 @@
 # Introduction:
 Upon start the graph will begin to transform and layout. Once this operation is complete the GUI can be utilized. In the GUI are two folders with algorithms, a slider to select number of nodes, and a button to clear changes to the graph.
 
-https://jacob-bendele.github.io/Graph-Visualizer-Project/
+[Launch Graph Visualizer](https://jacob-bendele.github.io/Graph-Visualizer-Project/)
         
 # Changing Number of Nodes:
 1. Allow graph to settle (very important or else there will be a lot of visual artifacts)
