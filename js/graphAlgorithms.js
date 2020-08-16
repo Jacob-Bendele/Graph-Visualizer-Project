@@ -1,5 +1,4 @@
-// Jacob Bendele ja644123
-// Final Project Code
+// Jacob Bendele
 
 // Breadth First Seach implemented with a queue
 // Function also takes the place of an animation loop to visualize BFS
@@ -177,9 +176,3 @@ function dijkstra(start, matrix, graph, end)
 		}
 	}
 }
-
-
-
-
-
-

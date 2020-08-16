@@ -1,5 +1,4 @@
-// Jacob Bendele ja644123
-// Final Project Code
+// Jacob Bendele
 
 // Basic force layout function "Eades"
 function ead84(nodeCount, nodes, links)
@@ -85,7 +84,7 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 				
 				scene.remove(scene.getObjectById(currentLink.id));
 				
-				let material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+				let material = new THREE.LineBasicMaterial( { color: 0x86c5da } );
 				let geometry = new THREE.Geometry();
 				
 				geometry.vertices.push(new THREE.Vector3( nodes[i].position.x, nodes[i].position.y, nodes[i].position.z) );
@@ -106,7 +105,7 @@ function updateLinks(linkMap, nodeCount, nodes, adjMatrix)
 let count = 0;
 function animate(graph)
 {
-	// Count is a magic number that the algorithm describes as coolness.
+	// Count is an imperical discovered magic number that the algorithm describes as coolness.
 	// At some iteration the graph will settle; 100 is this coolness value.
 	if (count == 100)
 	{	
@@ -123,20 +122,3 @@ function animate(graph)
 		animate(graph);
 	});
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

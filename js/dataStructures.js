@@ -1,5 +1,6 @@
-// Jacob Bendele ja644123
-// Final Project Code
+// Jacob Bendele
+
+// Implementations of common datastructures that are useful for graph algorithms.
 
 class Queue
 {

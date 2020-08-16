@@ -1,5 +1,4 @@
-// Jacob Bendele ja644123
-// Final Project Code
+// Jacob Bendele
 
 //Initializes a DAT GUI to interact with the graph
 function initGUI(graph)
@@ -69,7 +68,7 @@ function initGUI(graph)
 			// Clears link color changes
 			for (const entry of graph.linkMap.keys())
 			{
-				graph.linkMap.get(entry).material.color.setHex(0x0000ff);
+				graph.linkMap.get(entry).material.color.setHex(0x86c5da);
 			}
 			
 			// Clears node color changes
@@ -87,7 +86,6 @@ function initGUI(graph)
 				e.removeChild(child[i]);
 
 			}
-
 			render();
 		}		
 	};

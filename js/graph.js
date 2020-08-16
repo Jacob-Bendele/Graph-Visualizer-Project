@@ -1,5 +1,4 @@
-// Jacob Bendele ja644123
-// Final Project Code
+// Jacob Bendele
 
 // Graph class that takes care of random generation and 3D initalization of
 // a undirected graph
@@ -160,7 +159,7 @@ class Graph
 				{
 					this.adjMatrix[j][i] = 0; // Keeps from drawing two links
 					
-					let material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+					let material = new THREE.LineBasicMaterial( { color: 0x86c5da } );
 					let geometry = new THREE.Geometry();
 					
 					geometry.vertices.push(new THREE.Vector3( this.nodes[i].position.x, this.nodes[i].position.y, this.nodes[i].position.z) );
@@ -199,5 +198,3 @@ class Graph
 		cameraControls.update();
 	}
 }
-	
-	

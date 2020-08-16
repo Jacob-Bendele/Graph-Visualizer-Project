@@ -1,5 +1,4 @@
-// Jacob Bendele ja644123
-// Final Project Code
+// Jacob Bendele
 
 function main()
 {
